@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameController : Singleton<GameController>
@@ -22,6 +23,10 @@ public class GameController : Singleton<GameController>
     [Space(20)]
     [Header("Milestone Zone")]
     [SerializeField] private Transform milestoneLine;
+    [SerializeField] private GameObject smokePrefab;
+    [SerializeField] private GameObject milestoneZone;
+    [SerializeField] private GameObject milestoneDate;
+    [SerializeField] private TextMeshProUGUI txtMilestoneDate;
     [Header("Characters")]
     [SerializeField] private Character chun;
     [SerializeField] private Character chui;
@@ -38,7 +43,8 @@ public class GameController : Singleton<GameController>
         btnNotification.gameObject.SetActive(false);
         messageZone.SetActive(true);
         chooseZone.SetActive(false);
-        milestoneLine.gameObject.SetActive(false) ;
+        milestoneZone.SetActive(false);
+        milestoneLine.gameObject.SetActive(false);
     }
     private IEnumerator Start()
     {
@@ -58,7 +64,8 @@ public class GameController : Singleton<GameController>
     }
     private void Update()
     {
-
+        if (Input.GetKeyDown(KeyCode.R))
+            SceneManager.LoadScene("Gameplay");
         txtCurrentTime.text = string.Format("{0:00}:{1:00}", DateTime.Now.Hour, DateTime.Now.Minute);
         if (showingMessages)
         {
@@ -153,6 +160,39 @@ public class GameController : Singleton<GameController>
                 chun.transform.DOScale(.5f, 2);
                 chui.transform.DOMoveY(-4.5f, 2);
             }
+            yield return new WaitForSeconds(2.2f);
+            var smoke1 = Instantiate(smokePrefab);
+            var smoke2 = Instantiate(smokePrefab);
+            var chunPos = chun.transform.position;
+            chunPos.y -= .5f;
+            chunPos.z = -3;
+            var chuiPos = chui.transform.position;
+            chuiPos.y -= .5f;
+            chuiPos.z = -3;
+            smoke1.transform.position = chunPos;
+            smoke2.transform.position = chuiPos;
+            smoke1.transform.localScale = Vector3.one * (selectedChar == chun ? 2.5f : 1.5f);
+            smoke2.transform.localScale = Vector3.one * (selectedChar == chun ? 1.5f : 2.5f);
+            yield return new WaitForSeconds(2.583f / 3f);
+            smoke1.SetActive(false);
+            smoke2.SetActive(false);
+            chun.gameObject.SetActive(false);
+            chui.gameObject.SetActive(false);
+            yield return new WaitForSeconds(1);
+            milestoneZone.SetActive(true);
+            milestoneDate.SetActive(true);
+            txtMilestoneDate.text = "1995";
+            chunPos = chun.transform.position;
+            chunPos.x = -3.5f;
+            chun.transform.position = chunPos;
+            chunPos.y -= .5f;
+            chunPos.z = -3;
+            yield return new WaitForSeconds(1.5f);
+            chun.gameObject.SetActive(true);
+            smoke1.transform.position= chunPos; 
+            smoke1.SetActive(true);
+            yield return new WaitForSeconds(2.583f / 3f);
+            smoke1.SetActive(false);
         }
         StartCoroutine(IStartMilestoneRunning());
     }
