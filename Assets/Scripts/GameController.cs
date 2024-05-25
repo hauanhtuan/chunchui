@@ -26,7 +26,13 @@ public class GameController : Singleton<GameController>
     [SerializeField] private GameObject smokePrefab;
     [SerializeField] private GameObject milestoneZone;
     [SerializeField] private GameObject milestoneDate;
+    [SerializeField] private RectTransform milestoneDate2;
     [SerializeField] private TextMeshProUGUI txtMilestoneDate;
+    [SerializeField] private TextMeshProUGUI txtMilestoneDate2;
+    [SerializeField] private Transform chunMilestone;
+    [SerializeField] private Transform chuiMilestone;
+    [SerializeField] private SpriteRenderer[] chunMsSprites;
+    [SerializeField] private SpriteRenderer[] chuiMsSprites;
     [Header("Characters")]
     [SerializeField] private Character chun;
     [SerializeField] private Character chui;
@@ -45,6 +51,10 @@ public class GameController : Singleton<GameController>
         chooseZone.SetActive(false);
         milestoneZone.SetActive(false);
         milestoneLine.gameObject.SetActive(false);
+        chunMsSprites = chunMilestone.GetComponentsInChildren<SpriteRenderer>();
+        chuiMsSprites = chuiMilestone.GetComponentsInChildren<SpriteRenderer>();
+        chunMilestone.gameObject.SetActive(false);
+        chuiMilestone.gameObject.SetActive(false);
     }
     private IEnumerator Start()
     {
@@ -145,20 +155,32 @@ public class GameController : Singleton<GameController>
         milestoneLine.gameObject.SetActive(true);
         IEnumerator IStartMilestoneRunning()
         {
+            SetColor(chunMsSprites, new Color(1, 1, 1, 0), 0);
+            SetColor(chuiMsSprites, new Color(1, 1, 1, 0), 0);
             yield return new WaitForSeconds(1);
             if (selectedChar == chun)
             {
                 milestoneLine.DOMoveY(-3.6f, 2);
+                milestoneDate2.anchoredPosition = new Vector3(20, -1345);
                 chui.transform.DOMoveY(-8f, 2);
-                chui.transform.DOScale(.5f, 2);
+                chui.transform.DOScale(.375f, 2);
                 chun.transform.DOMoveY(0, 2);
+                chunMilestone.position = new Vector3(-5.5f, -1.9f, -.25f + 2f);
+                chunMilestone.localScale = Vector3.one;
+                chuiMilestone.position = new Vector3(-5.5f, -10.75f, -.26f + 2f);
+                chuiMilestone.localScale = Vector3.one*.55f;
             }
             else
             {
                 milestoneLine.DOMoveY(3.6f, 2);
+                milestoneDate2.anchoredPosition = new Vector3(20, -625);
                 chun.transform.DOMoveY(6f, 2);
-                chun.transform.DOScale(.5f, 2);
+                chun.transform.DOScale(.375f, 2);
                 chui.transform.DOMoveY(-4.5f, 2);
+                chunMilestone.position = new Vector3(-5.5f, 5.3f, -.25f + 2f);
+                chunMilestone.localScale = Vector3.one * .375f;
+                chuiMilestone.position = new Vector3(-5.5f, -9.3f, -.26f+2f);
+                chuiMilestone.localScale = Vector3.one;
             }
             yield return new WaitForSeconds(2.2f);
             var smoke1 = Instantiate(smokePrefab);
@@ -178,9 +200,14 @@ public class GameController : Singleton<GameController>
             smoke2.SetActive(false);
             chun.gameObject.SetActive(false);
             chui.gameObject.SetActive(false);
+            chunMilestone.gameObject.SetActive(true);
+            SetColor(chunMsSprites, new Color(1, 1, 1, 1), 1);
+            chuiMilestone.gameObject.SetActive(true);
+            SetColor(chuiMsSprites, new Color(1, 1, 1, 1), 1);
             yield return new WaitForSeconds(1);
             milestoneZone.SetActive(true);
             milestoneDate.SetActive(true);
+            milestoneDate2.gameObject.SetActive(false);
             txtMilestoneDate.text = "1995";
             chunPos = chun.transform.position;
             chunPos.x = -3.5f;
@@ -189,12 +216,24 @@ public class GameController : Singleton<GameController>
             chunPos.z = -3;
             yield return new WaitForSeconds(1.5f);
             chun.gameObject.SetActive(true);
-            smoke1.transform.position= chunPos; 
+            smoke1.transform.position = chunPos;
             smoke1.SetActive(true);
             yield return new WaitForSeconds(2.583f / 3f);
             smoke1.SetActive(false);
         }
         StartCoroutine(IStartMilestoneRunning());
+    }
+    private void SetColor(SpriteRenderer[] sprites, Color color, float duration, Action callback = null)
+    {
+        foreach (var sprite in sprites)
+        {
+            sprite.DOColor(color, duration);
+        }
+        if (callback != null)
+            DOVirtual.DelayedCall(duration, () =>
+            {
+                callback.Invoke();
+            });
     }
 }
 public enum Phase
