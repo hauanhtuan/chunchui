@@ -30,7 +30,9 @@ public class GameController : Singleton<GameController>
     [SerializeField] private TextMeshProUGUI txtMilestoneDate;
     [SerializeField] private TextMeshProUGUI txtMilestoneDate2;
     [SerializeField] private Transform chunMilestone;
+    [SerializeField] private MovingObject[] chunMoving;
     [SerializeField] private Transform chuiMilestone;
+    [SerializeField] private MovingObject[] chuiMoving;
     [SerializeField] private SpriteRenderer[] chunMsSprites;
     [SerializeField] private SpriteRenderer[] chuiMsSprites;
     [Header("Characters")]
@@ -53,6 +55,8 @@ public class GameController : Singleton<GameController>
         milestoneLine.gameObject.SetActive(false);
         chunMsSprites = chunMilestone.GetComponentsInChildren<SpriteRenderer>();
         chuiMsSprites = chuiMilestone.GetComponentsInChildren<SpriteRenderer>();
+        chunMoving=chunMilestone.GetComponentsInChildren<MovingObject>();   
+        chuiMoving=chuiMilestone.GetComponentsInChildren<MovingObject>();   
         chunMilestone.gameObject.SetActive(false);
         chuiMilestone.gameObject.SetActive(false);
     }
@@ -165,10 +169,10 @@ public class GameController : Singleton<GameController>
                 chui.transform.DOMoveY(-8f, 2);
                 chui.transform.DOScale(.375f, 2);
                 chun.transform.DOMoveY(0, 2);
-                chunMilestone.position = new Vector3(-5.5f, -1.9f, -.25f + 2f);
-                chunMilestone.localScale = Vector3.one;
-                chuiMilestone.position = new Vector3(-5.5f, -10.75f, -.26f + 2f);
-                chuiMilestone.localScale = Vector3.one*.55f;
+                chunMilestone.transform.position = new Vector3(-5.5f, -1.9f, -.25f + 2f);
+                chunMilestone.transform.localScale = Vector3.one;
+                chuiMilestone.transform.position = new Vector3(-5.5f, -10.75f, -.26f + 2f);
+                chuiMilestone.transform.localScale = Vector3.one * .55f;
             }
             else
             {
@@ -177,10 +181,10 @@ public class GameController : Singleton<GameController>
                 chun.transform.DOMoveY(6f, 2);
                 chun.transform.DOScale(.375f, 2);
                 chui.transform.DOMoveY(-4.5f, 2);
-                chunMilestone.position = new Vector3(-5.5f, 5.3f, -.25f + 2f);
-                chunMilestone.localScale = Vector3.one * .375f;
-                chuiMilestone.position = new Vector3(-5.5f, -9.3f, -.26f+2f);
-                chuiMilestone.localScale = Vector3.one;
+                chunMilestone.transform.position = new Vector3(-5.5f, 5.3f, -.25f + 2f);
+                chunMilestone.transform.localScale = Vector3.one * .375f;
+                chuiMilestone.transform.position = new Vector3(-5.5f, -9.3f, -.26f + 2f);
+                chuiMilestone.transform.localScale = Vector3.one;
             }
             yield return new WaitForSeconds(2.2f);
             var smoke1 = Instantiate(smokePrefab);
@@ -205,6 +209,7 @@ public class GameController : Singleton<GameController>
             chuiMilestone.gameObject.SetActive(true);
             SetColor(chuiMsSprites, new Color(1, 1, 1, 1), 1);
             yield return new WaitForSeconds(1);
+           
             milestoneZone.SetActive(true);
             milestoneDate.SetActive(true);
             milestoneDate2.gameObject.SetActive(false);
@@ -220,6 +225,30 @@ public class GameController : Singleton<GameController>
             smoke1.SetActive(true);
             yield return new WaitForSeconds(2.583f / 3f);
             smoke1.SetActive(false);
+            foreach (var m in chunMoving)
+                m.moving = true;
+            foreach (var m in chuiMoving)
+                m.moving = true;
+            var pos = chui.transform.position;
+            pos.x = 7.5f;
+         //   chui.transform.position= pos;
+         //   chui.transform.DOMoveX(-3.5f, 11/2f).SetEase(Ease.Linear);
+            yield return new WaitForSeconds(3);
+            milestoneDate2.gameObject.SetActive(true);
+            txtMilestoneDate.text = "1996";
+            txtMilestoneDate2.text = "1996";
+            yield return new WaitForSeconds(1.5f);
+            smoke2.gameObject.SetActive(true);
+            chui.gameObject.SetActive(true);
+            chuiPos = chui.transform.position;
+            chuiPos.x = -3.5f;
+            chui.transform.position = chuiPos;
+            chuiPos.y -= .5f;
+            chuiPos.z = -3;
+            smoke2.transform.position = chuiPos;
+            smoke2.SetActive(true);
+            yield return new WaitForSeconds(2.583f / 3f);
+            smoke2.SetActive(false);
         }
         StartCoroutine(IStartMilestoneRunning());
     }

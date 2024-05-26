@@ -8,7 +8,7 @@ public class MovingObject : MonoBehaviour
     [SerializeField] private float initPos;
     [SerializeField] private float speed = 1;
     
-    private bool moving = false;
+    [HideInInspector] public bool moving = false;
     // Start is called before the first frame update
     void Start()
     {

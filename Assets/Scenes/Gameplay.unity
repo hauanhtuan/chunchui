@@ -2930,6 +2930,7 @@ MonoBehaviour:
   minPos: -5.5
   initPos: 37.5
   speed: 0.3
+  moving: 0
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -3758,6 +3759,7 @@ MonoBehaviour:
   minPos: -5.5
   initPos: 37.5
   speed: 0.3
+  moving: 0
 --- !u!1 &736937248
 GameObject:
   m_ObjectHideFlags: 0
@@ -7200,7 +7202,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minPos: -18.32
   initPos: 27.48
-  speed: 1
+  speed: 2
+  moving: 0
 --- !u!1 &1324313197
 GameObject:
   m_ObjectHideFlags: 0
@@ -7804,7 +7807,9 @@ MonoBehaviour:
   txtMilestoneDate: {fileID: 22192897}
   txtMilestoneDate2: {fileID: 200967685}
   chunMilestone: {fileID: 1374928249}
+  chunMoving: []
   chuiMilestone: {fileID: 1461795034}
+  chuiMoving: []
   chunMsSprites: []
   chuiMsSprites: []
   chun: {fileID: 1114151251}
@@ -9921,7 +9926,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minPos: -18.32
   initPos: 27.48
-  speed: 1
+  speed: 2
+  moving: 0
 --- !u!1 &2072024846
 GameObject:
   m_ObjectHideFlags: 0
