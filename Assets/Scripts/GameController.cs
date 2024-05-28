@@ -134,7 +134,7 @@ public class GameController : Singleton<GameController>
             chun.transform.DOMoveX(0, 3).SetEase(Ease.Linear);
             yield return new WaitForSeconds(3);
             chun.SetAnim("idle");
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(1);
             chui.transform.position = new Vector3(8, -6.5f);
             chui.SetAnim("move");
             chui.transform.DOMoveX(0, 3).SetEase(Ease.Linear);
@@ -281,6 +281,7 @@ public class GameController : Singleton<GameController>
     }
     public void OnChunTouchWavez()
     {
+        Debug.Log("OnChunTouchWavez");
         txtMilestoneDate.text = "9/2022";
         txtMilestoneDate2.text = "9/2022";
         chunWavez.SetActive(false);
@@ -290,7 +291,7 @@ public class GameController : Singleton<GameController>
     private void OnChunWavezSetup()
     {
         var chunWPos = chunWavez.transform.localPosition;
-        chunWPos.x = selectedChar == chun ? 12f : 21f;
+        chunWPos.x = selectedChar == chun ? 12f : 19f;
         chunWPos.y = 2.5f;
         chunWavez.gameObject.SetActive(true);
         chunWavez.transform.localPosition = chunWPos;
