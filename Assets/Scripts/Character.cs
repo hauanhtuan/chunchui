@@ -69,4 +69,17 @@ public class Character : MonoBehaviour
             callback.Invoke();
         };
     }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision == null) return;
+        switch(collision.tag)
+        {
+            case "Wavez":
+                if (name == "Chui")
+                    GameController.Instance.OnChuiTouchWavez();
+                else
+                    GameController.Instance.OnChunTouchWavez();
+                break;
+        }
+    }
 }

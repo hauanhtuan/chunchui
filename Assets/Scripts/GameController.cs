@@ -35,6 +35,11 @@ public class GameController : Singleton<GameController>
     [SerializeField] private MovingObject[] chuiMoving;
     [SerializeField] private SpriteRenderer[] chunMsSprites;
     [SerializeField] private SpriteRenderer[] chuiMsSprites;
+    [SerializeField] private GameObject chunWavez;
+    [SerializeField] private GameObject chuiWavez;
+    [Header("Our Milestone")]
+    [SerializeField] private Transform ourBg;
+    [SerializeField] private Transform ourMilestone;
     [Header("Characters")]
     [SerializeField] private Character chun;
     [SerializeField] private Character chui;
@@ -55,16 +60,20 @@ public class GameController : Singleton<GameController>
         milestoneLine.gameObject.SetActive(false);
         chunMsSprites = chunMilestone.GetComponentsInChildren<SpriteRenderer>();
         chuiMsSprites = chuiMilestone.GetComponentsInChildren<SpriteRenderer>();
-        chunMoving=chunMilestone.GetComponentsInChildren<MovingObject>();   
-        chuiMoving=chuiMilestone.GetComponentsInChildren<MovingObject>();   
+        chunMoving = chunMilestone.GetComponentsInChildren<MovingObject>();
+        chuiMoving = chuiMilestone.GetComponentsInChildren<MovingObject>();
         chunMilestone.gameObject.SetActive(false);
         chuiMilestone.gameObject.SetActive(false);
+        chunWavez.SetActive(false);
+        chuiWavez.SetActive(false);
+        ourMilestone.gameObject.SetActive(false);
     }
     private IEnumerator Start()
     {
         phase = Phase.Messaging;
         yield return new WaitForSeconds(.5f);
         btnNotification.gameObject.SetActive(true);
+        SoundController.Instance.PlayMessFx();
     }
     private void OnNotification()
     {
@@ -125,6 +134,7 @@ public class GameController : Singleton<GameController>
             chun.transform.DOMoveX(0, 3).SetEase(Ease.Linear);
             yield return new WaitForSeconds(3);
             chun.SetAnim("idle");
+            yield return new WaitForSeconds(2);
             chui.transform.position = new Vector3(8, -6.5f);
             chui.SetAnim("move");
             chui.transform.DOMoveX(0, 3).SetEase(Ease.Linear);
@@ -209,7 +219,7 @@ public class GameController : Singleton<GameController>
             chuiMilestone.gameObject.SetActive(true);
             SetColor(chuiMsSprites, new Color(1, 1, 1, 1), 1);
             yield return new WaitForSeconds(1);
-           
+
             milestoneZone.SetActive(true);
             milestoneDate.SetActive(true);
             milestoneDate2.gameObject.SetActive(false);
@@ -231,8 +241,8 @@ public class GameController : Singleton<GameController>
                 m.moving = true;
             var pos = chui.transform.position;
             pos.x = 7.5f;
-         //   chui.transform.position= pos;
-         //   chui.transform.DOMoveX(-3.5f, 11/2f).SetEase(Ease.Linear);
+            //   chui.transform.position= pos;
+            //   chui.transform.DOMoveX(-3.5f, 11/2f).SetEase(Ease.Linear);
             yield return new WaitForSeconds(3);
             milestoneDate2.gameObject.SetActive(true);
             txtMilestoneDate.text = "1996";
@@ -242,6 +252,7 @@ public class GameController : Singleton<GameController>
             chui.gameObject.SetActive(true);
             chuiPos = chui.transform.position;
             chuiPos.x = -3.5f;
+            chuiPos.y = selectedChar == chui ? -5.5f : -8.65f;
             chui.transform.position = chuiPos;
             chuiPos.y -= .5f;
             chuiPos.z = -3;
@@ -249,8 +260,65 @@ public class GameController : Singleton<GameController>
             smoke2.SetActive(true);
             yield return new WaitForSeconds(2.583f / 3f);
             smoke2.SetActive(false);
+
+            var chuiWPos = chuiWavez.transform.localPosition;
+            chuiWPos.x = selectedChar == chui ? 12f : 21f;
+            chuiWPos.y = 4.5f;
+            chuiWavez.gameObject.SetActive(true);
+            chuiWavez.transform.localPosition = chuiWPos;
+            chuiWavez.transform.SetParent(chuiMoving[1].transform);
+
         }
         StartCoroutine(IStartMilestoneRunning());
+    }
+    public void OnChuiTouchWavez()
+    {
+        txtMilestoneDate.text = "2/2022";
+        txtMilestoneDate2.text = "2/2022";
+        OnChunWavezSetup();
+        chuiWavez.SetActive(false);
+        SoundController.Instance.PlayHutFx();
+    }
+    public void OnChunTouchWavez()
+    {
+        txtMilestoneDate.text = "9/2022";
+        txtMilestoneDate2.text = "9/2022";
+        chunWavez.SetActive(false);
+        SoundController.Instance.PlayHutFx();
+        StartOurMilestone();
+    }
+    private void OnChunWavezSetup()
+    {
+        var chunWPos = chunWavez.transform.localPosition;
+        chunWPos.x = selectedChar == chun ? 12f : 21f;
+        chunWPos.y = 2.5f;
+        chunWavez.gameObject.SetActive(true);
+        chunWavez.transform.localPosition = chunWPos;
+        chunWavez.transform.SetParent(chunMoving[1].transform);
+    }
+    private void StartOurMilestone()
+    {
+        IEnumerator IStart()
+        {
+
+            yield return new WaitForSeconds(1);
+            milestoneDate.GetComponent<MessageItem>().Hide();
+            milestoneDate2.GetComponent<MessageItem>().Hide();
+            ourBg.DOMoveY(0, 3);
+            yield return new WaitForSeconds(4);
+            ourBg.DOMoveY(-19.2f, 3);
+            chuiMilestone.gameObject.SetActive(false);
+            chunMilestone.gameObject.SetActive(false);
+            ourMilestone.gameObject.SetActive(true);
+            milestoneLine.gameObject.SetActive(false);
+            chui.transform.localScale = Vector3.one * .7f;
+            chun.transform.localScale = Vector3.one * .7f;
+            Vector3 pos = new Vector3(-4.5f, -4.5f, -1f);
+            chui.transform.position = pos;
+            pos.x += 1.5f;
+            chun.transform.position=    pos;
+        }
+        StartCoroutine(IStart());
     }
     private void SetColor(SpriteRenderer[] sprites, Color color, float duration, Action callback = null)
     {
