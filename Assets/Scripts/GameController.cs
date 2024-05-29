@@ -277,7 +277,7 @@ public class GameController : Singleton<GameController>
         txtMilestoneDate2.text = "2/2022";
         OnChunWavezSetup();
         chuiWavez.SetActive(false);
-        SoundController.Instance.PlayHutFx();
+        SoundController.Instance.PlayEatFx();
     }
     public void OnChunTouchWavez()
     {
@@ -285,7 +285,7 @@ public class GameController : Singleton<GameController>
         txtMilestoneDate.text = "9/2022";
         txtMilestoneDate2.text = "9/2022";
         chunWavez.SetActive(false);
-        SoundController.Instance.PlayHutFx();
+        SoundController.Instance.PlayEatFx();
         StartOurMilestone();
     }
     private void OnChunWavezSetup()

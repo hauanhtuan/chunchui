@@ -8,13 +8,15 @@ public class SoundController : Singleton<SoundController>
     [SerializeField] private AudioClip messengerFx;
     [SerializeField] private AudioClip hutFx;
     [SerializeField] private AudioClip bounceFx;
+    [SerializeField] private AudioClip selectedFx;
+    [SerializeField] private AudioClip eatFx;
     private void Start()
     {
         source = GetComponent<AudioSource>();
     }
     public void PlayMessFx()
     {
-        source.PlayOneShot(messengerFx);    
+        source.PlayOneShot(messengerFx);
     }
     public void PlayHutFx()
     {
@@ -23,5 +25,13 @@ public class SoundController : Singleton<SoundController>
     public void PlayBounceFx()
     {
         source.PlayOneShot(bounceFx);
+    }
+    public void PlaySelectedFx()
+    {
+        source.PlayOneShot(selectedFx);
+    }
+    public void PlayEatFx()
+    {
+        source.PlayOneShot(eatFx);
     }
 }

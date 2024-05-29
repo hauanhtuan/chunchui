@@ -46,6 +46,7 @@ public class Character : MonoBehaviour
         if (GameController.Instance.Phase != Phase.Choosing)
             return;
         GameController.Instance.SetCharacter(this);
+        SoundController.Instance.PlaySelectedFx();
         PlaySelectAnim();
     }
     private void PlaySelectAnim()

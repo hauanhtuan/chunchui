@@ -842,6 +842,8 @@ MonoBehaviour:
   messengerFx: {fileID: 8300000, guid: 2e5c608e50fe9984596542a79d411147, type: 3}
   hutFx: {fileID: 8300000, guid: c71012d0829cb0a4bb69312113c7b1d3, type: 3}
   bounceFx: {fileID: 8300000, guid: ce8b93e43fc16994181e4721ad2badba, type: 3}
+  selectedFx: {fileID: 8300000, guid: b1a48224e14bb2b4bb91e15823fdf38d, type: 3}
+  eatFx: {fileID: 8300000, guid: 6bfbab7fc1f132740956f764fb4f8135, type: 3}
 --- !u!4 &100927514
 Transform:
   m_ObjectHideFlags: 0
