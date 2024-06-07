@@ -40,11 +40,22 @@ public class GameController : Singleton<GameController>
     [Header("Our Milestone")]
     [SerializeField] private Transform ourBg;
     [SerializeField] private Transform ourMilestone;
+    [SerializeField] private MovingObject[] ourMoving;
+    [SerializeField] private MovingObject instax;
+    [Header("Tutorial")]
+    [SerializeField] private GameObject hand;
+    [SerializeField] private MessageItem tutTxt;
+    [Header("Items")]
+    [SerializeField] private MovingObject[] items;
+    [SerializeField] private MessageItem[] descriptions;
+
     [Header("Characters")]
     [SerializeField] private Character chun;
     [SerializeField] private Character chui;
     private bool showingMessages = false;
     private int curMessageIndex = 0;
+    private bool canJump = true;
+    private int countItem = 0;
 
     [HideInInspector] public Phase Phase => phase;
     [HideInInspector] public Character selectedChar;
@@ -66,7 +77,13 @@ public class GameController : Singleton<GameController>
         chuiMilestone.gameObject.SetActive(false);
         chunWavez.SetActive(false);
         chuiWavez.SetActive(false);
+        ourMoving = ourMilestone.GetComponentsInChildren<MovingObject>();
         ourMilestone.gameObject.SetActive(false);
+        hand.SetActive(false);
+        tutTxt.gameObject.SetActive(false);
+        foreach(var d in descriptions)
+            d.gameObject.SetActive(false);
+
     }
     private IEnumerator Start()
     {
@@ -103,6 +120,24 @@ public class GameController : Singleton<GameController>
                 messages[curMessageIndex].gameObject.SetActive(true);
             }
         }
+        else if (phase == Phase.Playing && Input.GetMouseButtonDown(0) && canJump)
+        {
+            canJump = false;
+            Jump();
+        }
+    }
+    private void Jump()
+    {
+        IEnumerator IJump()
+        {
+            chun.Jump();
+        SoundController.Instance.PlayBounceFx();
+            yield return new WaitForSeconds(.1f);
+            chui.Jump();
+            yield return new WaitForSeconds(1);
+            canJump = true;
+        }
+        StartCoroutine(IJump());
     }
     private void DoneShowMessages()
     {
@@ -317,9 +352,40 @@ public class GameController : Singleton<GameController>
             Vector3 pos = new Vector3(-4.5f, -4.5f, -1f);
             chui.transform.position = pos;
             pos.x += 1.5f;
-            chun.transform.position=    pos;
+            chun.transform.position = pos;
+            foreach (var m in ourMoving)
+                m.moving = true;
+            instax.moving = true;
+            Debug.Log(Time.time);
+            yield return new WaitForSeconds(14f);
+            foreach (var m in ourMoving)
+                m.moving = false;
+            instax.moving = false;
+            hand.SetActive(true);
+            tutTxt.gameObject.SetActive(true);
+            phase = Phase.Playing;
+            yield return new WaitUntil(() => !canJump);
+            foreach (var m in ourMoving)
+                m.moving = true;
+            instax.moving = true;
+            hand.SetActive(false);
+            tutTxt.gameObject.SetActive(false);
         }
         StartCoroutine(IStart());
+    }
+    public void NextItem()
+    {
+        IEnumerator INextItem()
+        {
+            if (countItem == 0) {
+                tutTxt.Hide();
+                    }
+            Destroy(items[countItem].gameObject);
+            descriptions[countItem].gameObject.SetActive(true);
+            yield return new WaitForSeconds(5);
+            descriptions[countItem].Hide();
+        }
+        StartCoroutine(INextItem());
     }
     private void SetColor(SpriteRenderer[] sprites, Color color, float duration, Action callback = null)
     {

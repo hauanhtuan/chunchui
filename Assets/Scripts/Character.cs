@@ -70,6 +70,11 @@ public class Character : MonoBehaviour
             callback.Invoke();
         };
     }
+    public void Jump()
+    {
+        SetAnim("jump");
+
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision == null) return;
@@ -80,6 +85,10 @@ public class Character : MonoBehaviour
                     GameController.Instance.OnChuiTouchWavez();
                 else
                     GameController.Instance.OnChunTouchWavez();
+                break;
+            case "Instax":
+                GameController.Instance.NextItem();
+        SoundController.Instance.PlayEatFx();
                 break;
         }
     }

@@ -8,4 +8,8 @@ public class BouncingSound : MonoBehaviour
     {
         SoundController.Instance.PlayBounceFx();
     }
+    public void End()
+    {
+        Debug.Log("End anim");
+    }
 }
