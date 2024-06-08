@@ -46,8 +46,12 @@ public class GameController : Singleton<GameController>
     [SerializeField] private GameObject hand;
     [SerializeField] private MessageItem tutTxt;
     [Header("Items")]
+    [SerializeField] private Transform polaroid;
+    [SerializeField] private Image polaroidImg;
     [SerializeField] private MovingObject[] items;
     [SerializeField] private MessageItem[] descriptions;
+    [SerializeField] private string[] daysText;
+    [SerializeField] private Sprite[] imgs;
 
     [Header("Characters")]
     [SerializeField] private Character chun;
@@ -81,8 +85,9 @@ public class GameController : Singleton<GameController>
         ourMilestone.gameObject.SetActive(false);
         hand.SetActive(false);
         tutTxt.gameObject.SetActive(false);
-        foreach(var d in descriptions)
+        foreach (var d in descriptions)
             d.gameObject.SetActive(false);
+        polaroid.gameObject.SetActive(false);
 
     }
     private IEnumerator Start()
@@ -131,7 +136,7 @@ public class GameController : Singleton<GameController>
         IEnumerator IJump()
         {
             chun.Jump();
-        SoundController.Instance.PlayBounceFx();
+            SoundController.Instance.PlayBounceFx();
             yield return new WaitForSeconds(.1f);
             chui.Jump();
             yield return new WaitForSeconds(1);
@@ -370,6 +375,7 @@ public class GameController : Singleton<GameController>
             instax.moving = true;
             hand.SetActive(false);
             tutTxt.gameObject.SetActive(false);
+
         }
         StartCoroutine(IStart());
     }
@@ -377,15 +383,52 @@ public class GameController : Singleton<GameController>
     {
         IEnumerator INextItem()
         {
-            if (countItem == 0) {
+            if (countItem == 0)
+            {
                 tutTxt.Hide();
-                    }
+                milestoneZone.SetActive(true);
+                milestoneDate2.gameObject.SetActive(false);
+                milestoneDate.SetActive(false);
+                yield return null;
+                milestoneDate.SetActive(true);
+            }
+
+            txtMilestoneDate.text = daysText[countItem];
+            polaroid.gameObject.SetActive(true);
+            polaroid.localScale = new Vector3(0, .5f, 1);
             Destroy(items[countItem].gameObject);
-            descriptions[countItem].gameObject.SetActive(true);
-            yield return new WaitForSeconds(5);
+            var itemshow = descriptions[countItem];
+            itemshow.gameObject.SetActive(true);
+            yield return new WaitForSeconds(3);
+            var iteminside = itemshow.transform.GetChild(itemshow.transform.childCount - 1);
+            iteminside.DOScaleX(0, .3f);
+            yield return new WaitForSeconds(.3f);
+            polaroidImg.sprite = imgs[countItem];
+            polaroid.DOScaleX(.5f, .3f);
+            yield return new WaitForSeconds(3);
+            polaroid.DOScaleX(0, .3f);
+            //yield return new WaitForSeconds(5);
             descriptions[countItem].Hide();
+            countItem++;
+            if (countItem >= descriptions.Length)
+            {
+                Debug.Log("Done");
+                Marrige();
+            }
+            else
+                items[countItem].moving = true;
         }
         StartCoroutine(INextItem());
+    }
+    private void Marrige()
+    {
+        IEnumerator IMarrige()
+        {
+            foreach (var o in ourMoving)
+                o.moving = false;
+            yield return null;
+        }
+        StartCoroutine(IMarrige());
     }
     private void SetColor(SpriteRenderer[] sprites, Color color, float duration, Action callback = null)
     {
