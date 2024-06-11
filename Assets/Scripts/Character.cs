@@ -10,6 +10,7 @@ public class Character : MonoBehaviour
     [SerializeField] private SpriteRenderer sr;
     [SerializeField] private Material matGrey;
     [SerializeField] private Material matDefault;
+    [SerializeField] private SpriteRenderer accessory;
     Tween twScale;
     private void Start()
     {
@@ -74,6 +75,14 @@ public class Character : MonoBehaviour
     {
         SetAnim("jump");
 
+    }
+    public void Stand()
+    {
+        anim.SetTrigger("Stand");
+    }
+    public void ShowAccessory()
+    {
+        accessory.DOColor(Color.white, 4);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {

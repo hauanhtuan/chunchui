@@ -52,7 +52,10 @@ public class GameController : Singleton<GameController>
     [SerializeField] private MessageItem[] descriptions;
     [SerializeField] private string[] daysText;
     [SerializeField] private Sprite[] imgs;
-
+    [Header("Last event")]
+    [SerializeField] private MessageItem msg1;
+    [SerializeField] private MessageItem msg2;
+    [SerializeField] private RectTransform thiep;
     [Header("Characters")]
     [SerializeField] private Character chun;
     [SerializeField] private Character chui;
@@ -88,6 +91,7 @@ public class GameController : Singleton<GameController>
         foreach (var d in descriptions)
             d.gameObject.SetActive(false);
         polaroid.gameObject.SetActive(false);
+        thiep.gameObject.SetActive(false);
 
     }
     private IEnumerator Start()
@@ -109,7 +113,11 @@ public class GameController : Singleton<GameController>
     }
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.A))
+            StartOurMilestone();
         if (Input.GetKeyDown(KeyCode.R))
+                Debug.Log(thiep.anchoredPosition + " " + thiep.anchorMin + " " + thiep.anchorMax);
+        if (Input.GetKeyDown(KeyCode.S))
             SceneManager.LoadScene("Gameplay");
         txtCurrentTime.text = string.Format("{0:00}:{1:00}", DateTime.Now.Hour, DateTime.Now.Minute);
         if (showingMessages)
@@ -341,7 +349,7 @@ public class GameController : Singleton<GameController>
     {
         IEnumerator IStart()
         {
-
+            Time.timeScale = 1.7f;
             yield return new WaitForSeconds(1);
             milestoneDate.GetComponent<MessageItem>().Hide();
             milestoneDate2.GetComponent<MessageItem>().Hide();
@@ -399,20 +407,23 @@ public class GameController : Singleton<GameController>
             Destroy(items[countItem].gameObject);
             var itemshow = descriptions[countItem];
             itemshow.gameObject.SetActive(true);
-            yield return new WaitForSeconds(3);
-            var iteminside = itemshow.transform.GetChild(itemshow.transform.childCount - 1);
-            iteminside.DOScaleX(0, .3f);
-            yield return new WaitForSeconds(.3f);
-            polaroidImg.sprite = imgs[countItem];
-            polaroid.DOScaleX(.5f, .3f);
-            yield return new WaitForSeconds(3);
-            polaroid.DOScaleX(0, .3f);
+            
+                yield return new WaitForSeconds(4);
+                var iteminside = itemshow.transform.GetChild(itemshow.transform.childCount - 1);
+                iteminside.DOScaleX(0, .3f);
+                yield return new WaitForSeconds(.3f);
+                polaroidImg.sprite = imgs[countItem];
+                polaroid.DOScaleX(.5f, .3f);
+                yield return new WaitForSeconds(4);
+                polaroid.DOScaleX(0, .3f);
             //yield return new WaitForSeconds(5);
             descriptions[countItem].Hide();
             countItem++;
             if (countItem >= descriptions.Length)
             {
                 Debug.Log("Done");
+                yield return new WaitForSeconds(1);
+
                 Marrige();
             }
             else
@@ -424,9 +435,30 @@ public class GameController : Singleton<GameController>
     {
         IEnumerator IMarrige()
         {
+            phase = Phase.Marring;
             foreach (var o in ourMoving)
                 o.moving = false;
-            yield return null;
+            chui.transform.DOMoveX(1, 4.5f).SetEase(Ease.Linear);
+            chun.transform.DOMoveX(-1, 2.5f).SetEase(Ease.Linear);
+            yield return new WaitForSeconds(4.5f);
+            chun.Stand();
+            chui.Stand();
+            yield return new WaitForSeconds(1f);
+            msg1.gameObject.SetActive(true);
+            yield return new WaitForSeconds(7);
+            msg1.Hide();
+            yield return new WaitForSeconds(1);
+            chun.ShowAccessory();
+            chui.ShowAccessory();
+            yield return new WaitForSeconds(7);
+            msg2.gameObject.SetActive(true);
+            yield return new WaitForSeconds(7);
+            msg2.Hide();
+            thiep.anchoredPosition = new Vector2(0, -1920);
+            thiep.gameObject.SetActive(true);
+            yield return new WaitForSeconds(1);
+
+            thiep.DOAnchorPos(Vector2.zero,3);
         }
         StartCoroutine(IMarrige());
     }
@@ -449,5 +481,6 @@ public enum Phase
     Running,
     Choosing,
     Zooming,
-    Playing
+    Playing,
+    Marring
 }
