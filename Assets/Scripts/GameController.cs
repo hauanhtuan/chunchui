@@ -11,6 +11,7 @@ public class GameController : Singleton<GameController>
 {
     [SerializeField] private Phase phase;
     [Header("Message Zone")]
+    [SerializeField] private Button btnStart;
     [SerializeField] private GameObject messageZone;
     [SerializeField] private TextMeshProUGUI txtCurrentTime;
     [SerializeField] private Button btnNotification;
@@ -63,6 +64,8 @@ public class GameController : Singleton<GameController>
     private int curMessageIndex = 0;
     private bool canJump = true;
     private int countItem = 0;
+    private bool touchFlipImage = false;
+    private bool touchNext = false;
 
     [HideInInspector] public Phase Phase => phase;
     [HideInInspector] public Character selectedChar;
@@ -72,7 +75,7 @@ public class GameController : Singleton<GameController>
         base.Awake();
         btnNotification.onClick.AddListener(OnNotification);
         btnNotification.gameObject.SetActive(false);
-        messageZone.SetActive(true);
+        messageZone.SetActive(false);
         chooseZone.SetActive(false);
         milestoneZone.SetActive(false);
         milestoneLine.gameObject.SetActive(false);
@@ -92,11 +95,20 @@ public class GameController : Singleton<GameController>
             d.gameObject.SetActive(false);
         polaroid.gameObject.SetActive(false);
         thiep.gameObject.SetActive(false);
+        btnStart.onClick.AddListener(() =>
+        {
+            StartCoroutine(StartMessage());
+        });
+    }
+    private void Start()
+    {
 
     }
-    private IEnumerator Start()
+    private IEnumerator StartMessage()
     {
         phase = Phase.Messaging;
+        btnStart.gameObject.SetActive(false);
+        messageZone.SetActive(true);
         yield return new WaitForSeconds(.5f);
         btnNotification.gameObject.SetActive(true);
         SoundController.Instance.PlayMessFx();
@@ -114,9 +126,12 @@ public class GameController : Singleton<GameController>
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.A))
+        {
+            messageZone.SetActive(false);
             StartOurMilestone();
+        }
         if (Input.GetKeyDown(KeyCode.R))
-                Debug.Log(thiep.anchoredPosition + " " + thiep.anchorMin + " " + thiep.anchorMax);
+            Debug.Log(thiep.anchoredPosition + " " + thiep.anchorMin + " " + thiep.anchorMax);
         if (Input.GetKeyDown(KeyCode.S))
             SceneManager.LoadScene("Gameplay");
         txtCurrentTime.text = string.Format("{0:00}:{1:00}", DateTime.Now.Hour, DateTime.Now.Minute);
@@ -137,6 +152,14 @@ public class GameController : Singleton<GameController>
         {
             canJump = false;
             Jump();
+        }
+        else if (phase == Phase.Showing && Input.GetMouseButtonDown(0))
+        {
+            touchFlipImage = true;
+        }
+        else if (phase == Phase.Marring && Input.GetMouseButtonDown(0))
+        {
+            touchNext = true;
         }
     }
     private void Jump()
@@ -353,9 +376,9 @@ public class GameController : Singleton<GameController>
             yield return new WaitForSeconds(1);
             milestoneDate.GetComponent<MessageItem>().Hide();
             milestoneDate2.GetComponent<MessageItem>().Hide();
-            ourBg.DOMoveY(0, 3);
-            yield return new WaitForSeconds(4);
-            ourBg.DOMoveY(-19.2f, 3);
+            ourBg.DOMoveY(0, 5);
+            yield return new WaitForSeconds(7);
+            ourBg.DOMoveY(-19.2f, 4);
             chuiMilestone.gameObject.SetActive(false);
             chunMilestone.gameObject.SetActive(false);
             ourMilestone.gameObject.SetActive(true);
@@ -370,7 +393,7 @@ public class GameController : Singleton<GameController>
                 m.moving = true;
             instax.moving = true;
             Debug.Log(Time.time);
-            yield return new WaitForSeconds(14f);
+            yield return new WaitForSeconds(5f);
             foreach (var m in ourMoving)
                 m.moving = false;
             instax.moving = false;
@@ -380,6 +403,7 @@ public class GameController : Singleton<GameController>
             yield return new WaitUntil(() => !canJump);
             foreach (var m in ourMoving)
                 m.moving = true;
+            
             instax.moving = true;
             hand.SetActive(false);
             tutTxt.gameObject.SetActive(false);
@@ -402,21 +426,35 @@ public class GameController : Singleton<GameController>
             }
 
             txtMilestoneDate.text = daysText[countItem];
-            polaroid.gameObject.SetActive(true);
+            polaroid.gameObject.SetActive(false);
             polaroid.localScale = new Vector3(0, .5f, 1);
             Destroy(items[countItem].gameObject);
             var itemshow = descriptions[countItem];
+
+            foreach (var m in ourMoving)
+                m.moving = false;
+            chun.Stand();
+            chui.Stand();
+
             itemshow.gameObject.SetActive(true);
-            
-                yield return new WaitForSeconds(4);
-                var iteminside = itemshow.transform.GetChild(itemshow.transform.childCount - 1);
-                iteminside.DOScaleX(0, .3f);
-                yield return new WaitForSeconds(.3f);
-                polaroidImg.sprite = imgs[countItem];
-                polaroid.DOScaleX(.5f, .3f);
-                yield return new WaitForSeconds(4);
-                polaroid.DOScaleX(0, .3f);
-            //yield return new WaitForSeconds(5);
+            phase = Phase.Showing;
+            yield return new WaitUntil(() => touchFlipImage);
+            touchFlipImage = false;
+            var iteminside = itemshow.transform.GetChild(itemshow.transform.childCount - 1);
+            iteminside.DOScaleX(0, .3f);
+            yield return new WaitForSeconds(.3f);
+            polaroid.gameObject.SetActive(true);
+            polaroidImg.sprite = imgs[countItem];
+            polaroid.DOScaleX(.5f, .3f);
+            yield return new WaitUntil(() => touchFlipImage);
+            touchFlipImage = false;
+            polaroid.DOScaleX(0, .3f);
+            yield return new WaitForSeconds(.3f);
+            foreach (var m in ourMoving)
+                m.moving = true;
+            chun.SetAnim("idle");
+            chui.SetAnim("idle");
+            phase = Phase.Playing;
             descriptions[countItem].Hide();
             countItem++;
             if (countItem >= descriptions.Length)
@@ -445,20 +483,22 @@ public class GameController : Singleton<GameController>
             chui.Stand();
             yield return new WaitForSeconds(1f);
             msg1.gameObject.SetActive(true);
-            yield return new WaitForSeconds(7);
+            yield return new WaitUntil(() => touchNext);
+            touchNext = false;
             msg1.Hide();
             yield return new WaitForSeconds(1);
             chun.ShowAccessory();
             chui.ShowAccessory();
             yield return new WaitForSeconds(7);
             msg2.gameObject.SetActive(true);
-            yield return new WaitForSeconds(7);
+            yield return new WaitUntil(() => touchNext);
+            touchNext = false;
             msg2.Hide();
             thiep.anchoredPosition = new Vector2(0, -1920);
             thiep.gameObject.SetActive(true);
             yield return new WaitForSeconds(1);
 
-            thiep.DOAnchorPos(Vector2.zero,3);
+            thiep.DOAnchorPos(Vector2.zero, 3);
         }
         StartCoroutine(IMarrige());
     }
@@ -482,5 +522,6 @@ public enum Phase
     Choosing,
     Zooming,
     Playing,
+    Showing,
     Marring
 }
