@@ -306,6 +306,7 @@ public class GameController : Singleton<GameController>
             smoke1.SetActive(true);
             yield return new WaitForSeconds(2.583f / 3f);
             smoke1.SetActive(false);
+            SoundController.Instance.PlayBGM();
             foreach (var m in chunMoving)
                 m.moving = true;
             foreach (var m in chuiMoving)
@@ -513,6 +514,10 @@ public class GameController : Singleton<GameController>
             {
                 callback.Invoke();
             });
+    }
+    public void OpenQRMap()
+    {
+        Application.OpenURL("https://maps.app.goo.gl/7aUPpBYMmAx39GFMA");
     }
 }
 public enum Phase

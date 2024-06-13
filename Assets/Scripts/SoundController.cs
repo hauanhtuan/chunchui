@@ -10,6 +10,7 @@ public class SoundController : Singleton<SoundController>
     [SerializeField] private AudioClip bounceFx;
     [SerializeField] private AudioClip selectedFx;
     [SerializeField] private AudioClip eatFx;
+    [SerializeField] private AudioClip bgmClip;
     private void Start()
     {
         source = GetComponent<AudioSource>();
@@ -33,5 +34,10 @@ public class SoundController : Singleton<SoundController>
     public void PlayEatFx()
     {
         source.PlayOneShot(eatFx);
+    }
+    public void PlayBGM()
+    {
+        source.clip = bgmClip;
+        source.Play();
     }
 }
