@@ -13779,6 +13779,23 @@ MonoBehaviour:
   msg1: {fileID: 1924179724}
   msg2: {fileID: 285852581}
   thiep: {fileID: 347199666}
+  txtDay: {fileID: 773809842140938665}
+  txtMonth: {fileID: 4899924789043929027}
+  txtInfoRestaurant: {fileID: 6397994857141301033}
+  txtRestaurantAddressChun: "H\xF4n l\u1EC5 \u0111\u01B0\u1EE3c t\u1ED5 ch\u1EE9c
+    t\u1EA1i Nh\xE0 h\xE0ng New Century (Nh\xE0 h\xE0ng Xanh c\u0169)\\nS\u1ED1 433,
+    \u0111\u01B0\u1EDDng Tr\u1EA7n \u0110\u0103ng Ninh, ph\u01B0\u1EDDng Tam Thanh,
+    th\xE0nh ph\u1ED1 L\u1EA1ng S\u01A1n."
+  txtRestaurantAddressChui: "H\xF4n l\u1EC5 \u0111\u01B0\u1EE3c t\u1ED5 ch\u1EE9c
+    t\u1EA1i Nh\xE0 h\xE0ng Tr\u01B0\u1EDDng Nguy\u1EC7t 2 \\nS\u1ED1 479 QL18, ph\u01B0\u1EDDng
+    C\u1EA9m Th\u1ECBnh, th\xE0nh ph\u1ED1 C\u1EA9m Ph\u1EA3, t\u1EC9nh Qu\u1EA3ng
+    Ninh"
+  imgQRRestaurant: {fileID: 5726605862007360020}
+  qrRestaurantChun: {fileID: 21300000, guid: 8c852dd32d6e93e4f9d1feee4946fa8e, type: 3}
+  qrRestaurantChui: {fileID: 21300000, guid: af805354e7eb66546945855f07518602, type: 3}
+  imgQRMoney: {fileID: 2562432113780748233}
+  qrMoneyChun: {fileID: 21300000, guid: f152059082f17ea4cb81d01095232491, type: 3}
+  qrMoneyChui: {fileID: 21300000, guid: 27fa286a350617c45a32fe1628a34212, type: 3}
   chun: {fileID: 1114151251}
   chui: {fileID: 2102580602}
   selectedChar: {fileID: 0}
@@ -20080,7 +20097,7 @@ GameObject:
   - component: {fileID: 1859179980614882226}
   - component: {fileID: 6397994857141301033}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: TxtRestaurant
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21343,7 +21360,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "C\u1EA3m \u01A1n b\u1EA1n v\xEC \u0111\xE3 theo d\xF5i c\xE2u chuy\u1EC7n
-    c\u1EE7a b\u1ECDn m\xECnh nh\xE9!"
+    c\u1EE7a b\u1ECDn m\xECnh!"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a7f42c88375a76b408dd8e6ebe179d40, type: 2}
   m_sharedMaterial: {fileID: 1536520165471507734, guid: a7f42c88375a76b408dd8e6ebe179d40, type: 2}
@@ -21766,9 +21783,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "H\xF4n l\u1EC5 \u0111\u01B0\u1EE3c t\u1ED5 ch\u1EE9c t\u1EA1i Nh\xE0 h\xE0ng
-    New Century (Nh\xE0 h\xE0ng Xanh c\u0169)\nS\u1ED1 433, \u0111\u01B0\u1EDDng
-    Tr\u1EA7n \u0110\u0103ng Ninh, ph\u01B0\u1EDDng Tam Thanh, th\xE0nh ph\u1ED1
-    L\u1EA1ng S\u01A1n."
+    Tr\u01B0\u1EDDng Nguy\u1EC7t 2 \\nS\u1ED1 479 QL18, ph\u01B0\u1EDDng C\u1EA9m
+    Th\u1ECBnh, th\xE0nh ph\u1ED1 C\u1EA9m Ph\u1EA3, t\u1EC9nh Qu\u1EA3ng Ninh"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

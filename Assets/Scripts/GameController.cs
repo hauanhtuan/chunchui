@@ -57,6 +57,18 @@ public class GameController : Singleton<GameController>
     [SerializeField] private MessageItem msg1;
     [SerializeField] private MessageItem msg2;
     [SerializeField] private RectTransform thiep;
+    [Header("Info thiep")]
+    [SerializeField] private TextMeshProUGUI txtDay;
+    [SerializeField] private TextMeshProUGUI txtMonth;
+    [SerializeField] private TextMeshProUGUI txtInfoRestaurant;
+    [SerializeField] private string txtRestaurantAddressChun;
+    [SerializeField] private string txtRestaurantAddressChui;
+    [SerializeField] private Image imgQRRestaurant;
+    [SerializeField] private Sprite qrRestaurantChun;
+    [SerializeField] private Sprite qrRestaurantChui;
+    [SerializeField] private Image imgQRMoney;
+    [SerializeField] private Sprite qrMoneyChun;
+    [SerializeField] private Sprite qrMoneyChui;
     [Header("Characters")]
     [SerializeField] private Character chun;
     [SerializeField] private Character chui;
@@ -487,10 +499,14 @@ public class GameController : Singleton<GameController>
             yield return new WaitUntil(() => touchNext);
             touchNext = false;
             msg1.Hide();
+            phase = Phase.Zooming;
             yield return new WaitForSeconds(1);
             chun.ShowAccessory();
             chui.ShowAccessory();
-            yield return new WaitForSeconds(7);
+            yield return new WaitForSeconds(3);
+            phase = Phase.Marring;
+            yield return new WaitUntil(() => touchNext);
+            touchNext = false;
             msg2.gameObject.SetActive(true);
             yield return new WaitUntil(() => touchNext);
             touchNext = false;
@@ -500,6 +516,23 @@ public class GameController : Singleton<GameController>
             yield return new WaitForSeconds(1);
 
             thiep.DOAnchorPos(Vector2.zero, 3);
+
+            if(selectedChar == chun)
+            {
+                txtDay.text = "07";
+                txtMonth.text = "07";
+                txtInfoRestaurant.text = txtRestaurantAddressChun;
+                imgQRRestaurant.sprite = qrRestaurantChun;
+                imgQRMoney.sprite = qrMoneyChun; 
+            }
+            else
+            {
+                txtDay.text = "08";
+                txtMonth.text = "09";
+                txtInfoRestaurant.text = txtRestaurantAddressChui;
+                imgQRRestaurant.sprite = qrRestaurantChui;
+                imgQRMoney.sprite = qrMoneyChui;
+            }
         }
         StartCoroutine(IMarrige());
     }
@@ -517,7 +550,7 @@ public class GameController : Singleton<GameController>
     }
     public void OpenQRMap()
     {
-        Application.OpenURL("https://maps.app.goo.gl/7aUPpBYMmAx39GFMA");
+        Application.OpenURL(selectedChar == chun ?"https://maps.app.goo.gl/7aUPpBYMmAx39GFMA": "https://maps.app.goo.gl/xCEQUiMpzFercaFx7");
     }
 }
 public enum Phase

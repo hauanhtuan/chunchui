@@ -38,6 +38,7 @@ public class SoundController : Singleton<SoundController>
     public void PlayBGM()
     {
         source.clip = bgmClip;
+        source.loop = true;
         source.Play();
     }
 }
