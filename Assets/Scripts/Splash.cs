@@ -9,13 +9,17 @@ public class Splash : MonoBehaviour
     private IEnumerator Start()
     {
         var temp = SceneManager.LoadSceneAsync("Gameplay");
-        while(!temp.isDone)
+        temp.allowSceneActivation = false;
+        float time = 0;
+        while (time<1.5f)
         {
-            var progress = temp.progress;
+            var progress = time / 1.5f; 
             var size = bar.sizeDelta;
             size.x = progress * 480;
             bar.sizeDelta = size;
+            time += Time.deltaTime;
             yield return null;
         }
+        temp.allowSceneActivation = true;
     }
 }
