@@ -5,13 +5,20 @@ using UnityEngine;
 public class SoundController : Singleton<SoundController>
 {
     [SerializeField] private AudioSource source;
+    [SerializeField] private AudioSource bgmsource;
     [SerializeField] private AudioClip messengerFx;
     [SerializeField] private AudioClip hutFx;
     [SerializeField] private AudioClip bounceFx;
     [SerializeField] private AudioClip selectedFx;
     [SerializeField] private AudioClip eatFx;
     [SerializeField] private AudioClip appearFx;
+    [SerializeField] private AudioClip flipFx;
+    [SerializeField] private AudioClip flopFx;
+    [SerializeField] private AudioClip transfigFx;
+    [SerializeField] private AudioClip helloNamFx;
+    [SerializeField] private AudioClip helloNuFx;
     [SerializeField] private AudioClip bgmClip;
+    [SerializeField] private AudioClip bgm2Clip;
     private void Start()
     {
         source = GetComponent<AudioSource>();
@@ -39,10 +46,35 @@ public class SoundController : Singleton<SoundController>
     public void PlayAppearFx() {
         source.PlayOneShot(appearFx);
     }
+    public void PlayFlipFlopFx(bool flip)
+    {
+        source.PlayOneShot(flip?flipFx:flopFx);
+
+    }
+    public void PlayTranfigFx()
+    {
+        source.PlayOneShot(transfigFx);
+    }
+    public void PlayHelloNamFx()
+    {
+        source.PlayOneShot(helloNamFx);
+    }
+    public void PlayHelloNuFx()
+    {
+        source.PlayOneShot(helloNuFx);
+    }
     public void PlayBGM()
     {
-        source.clip = bgmClip;
-        source.loop = true;
-        source.Play();
+        bgmsource.volume = .5f;
+        bgmsource.clip = bgmClip;
+        bgmsource.loop = true;
+        bgmsource.Play();
+    }
+    public void PlayBGM2()
+    {
+        bgmsource.volume = 1f;
+        bgmsource.clip = bgm2Clip;
+        bgmsource.loop = true;
+        bgmsource.Play();
     }
 }

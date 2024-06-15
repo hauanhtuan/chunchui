@@ -1,56 +1,109 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Tuan Diep's Wedding Invitation</title>
-  </head>
-  <body style="text-align: center; padding: 0; border: 0; margin: 0;">
-    <canvas id="unity-canvas"></canvas>
-	<style>
-  * {
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
-  }
-  #unity-canvas {
-    width: calc(100vh * 9 / 16); 
-    height: 100vh; 
-    background: #000000;
-    position: fixed;
-    top: 0;
-    
-  }
-</style>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Tuan Diep's Wedding Invitation</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      padding: 0;
+      margin: 0;
+    }
+    body {
+	background: #ffffff;
+      text-align: center;
+      padding: 0;
+      border: 0;
+      margin: 0;
+      overflow: hidden; /* Ngăn chặn cuộn màn hình khi chế độ ngang */
+    }
+    #unity-canvas {
+      position: fixed;
+      background: #ffffff;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 0;
+    }
+	 #background-canvas {
+      position: fixed;
+      top: 100;
+      left: 100;
+      
+      z-index: 1; /* Đặt lớp dưới cùng */
+      filter: blur(5px); /* Làm mờ canvas nền */
+    }
+  </style>
+</head>
+<body>
+<canvas id="background-canvas"></canvas>
+  <canvas id="unity-canvas"></canvas>
 
-    <script src="Build/Build_WebGL.loader.js"></script>
-    <script>
-      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        // Mobile device style: fill the whole browser client area with the game canvas:
-        var meta = document.createElement('meta');
-        meta.name = 'viewport';
-        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-        document.getElementsByTagName('head')[0].appendChild(meta);
+  <script src="Build/Build_WebGL.loader.js"></script>
+  <script>
+    if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+      // Thiết lập cho thiết bị di động: lấp đầy không gian trình duyệt với canvas game
+      var meta = document.createElement('meta');
+      meta.name = 'viewport';
+      meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+      document.getElementsByTagName('head')[0].appendChild(meta);
 
-        var canvas = document.querySelector("#unity-canvas");
-        canvas.style.width = "100%";
-        canvas.style.height = "100%";
-        canvas.style.position = "fixed";
+      document.body.style.textAlign = "left";
+    }
 
-        document.body.style.textAlign = "left";
+    function resizeCanvas() {
+      var canvas = document.getElementById('unity-canvas');
+      var windowWidth = window.innerWidth;
+      var windowHeight = window.innerHeight;
+
+      if (windowWidth / windowHeight < 9 / 16) {
+        // Nếu tỷ lệ cửa sổ nhỏ hơn 9:16, điều chỉnh theo chiều rộng
+        canvas.style.width = windowWidth + 'px';
+        canvas.style.height = (windowWidth * 16 / 9) + 'px';
+      } else {
+        // Nếu tỷ lệ cửa sổ lớn hơn hoặc bằng 9:16, điều chỉnh theo chiều cao
+        canvas.style.width = (windowHeight * 9 / 16) + 'px';
+        canvas.style.height = windowHeight + 'px';
+      }
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('load', resizeCanvas);
+
+
+
+
+    createUnityInstance(document.querySelector("#unity-canvas"), {
+      dataUrl: "Build/Build_WebGL.data.unityweb",
+      frameworkUrl: "Build/Build_WebGL.framework.js.unityweb",
+      codeUrl: "Build/Build_WebGL.wasm.unityweb",
+      streamingAssetsUrl: "StreamingAssets",
+      companyName: "DefaultCompany",
+      productName: "ChunChui",
+      productVersion: "1.0",
+      // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
+      // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
+    }).then((unityInstance)=>{
+	function copyCanvasContent() {
+        var unityCanvas = document.getElementById('unity-canvas');
+        var backgroundCanvas = document.getElementById('background-canvas');
+
+        
+
+        var ctxBackground = backgroundCanvas.getContext('2d');
+
+        // Xóa hình ảnh cũ trên background-canvas
+        ctxBackground.clearRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
+	console.log("Lmao");
+        // Sao chép nội dung từ unity-canvas vào background-canvas
+        ctxBackground.drawImage(unityCanvas, 0, 0, backgroundCanvas.width, backgroundCanvas.height);
       }
 
-      createUnityInstance(document.querySelector("#unity-canvas"), {
-        dataUrl: "Build/Build_WebGL.data.unityweb",
-        frameworkUrl: "Build/Build_WebGL.framework.js.unityweb",
-        codeUrl: "Build/Build_WebGL.wasm.unityweb",
-        streamingAssetsUrl: "StreamingAssets",
-        companyName: "DefaultCompany",
-        productName: "ChunChui",
-        productVersion: "1.0",
-        // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
-        // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
-      });
-    </script>
-  </body>
+      // Gọi hàm copyCanvasContent định kỳ
+      setInterval(copyCanvasContent, 1000 / 30); // 30 lần mỗi giây
+	});
+	
+  </script>
+</body>
 </html>

@@ -1,4 +1,4 @@
-using DG.Tweening;
+﻿using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -38,6 +38,7 @@ public class GameController : Singleton<GameController>
     [SerializeField] private SpriteRenderer[] chuiMsSprites;
     [SerializeField] private GameObject chunWavez;
     [SerializeField] private GameObject chuiWavez;
+    [SerializeField] private Button btnSkip;
     [Header("Our Milestone")]
     [SerializeField] private Transform ourBg;
     [SerializeField] private Transform ourMilestone;
@@ -89,6 +90,8 @@ public class GameController : Singleton<GameController>
         btnNotification.gameObject.SetActive(false);
         messageZone.SetActive(false);
         chooseZone.SetActive(false);
+        btnSkip.onClick.AddListener(Skip);
+        btnSkip.gameObject.SetActive(false);
         milestoneZone.SetActive(false);
         milestoneLine.gameObject.SetActive(false);
         chunMsSprites = chunMilestone.GetComponentsInChildren<SpriteRenderer>();
@@ -234,6 +237,7 @@ public class GameController : Singleton<GameController>
                 chui.transform.DOScale(1, 0.3f);
             };
             phase = Phase.Choosing;
+            yield return new WaitForSeconds(1);
 
         }
         StartCoroutine(IShowChooseZone());
@@ -293,6 +297,8 @@ public class GameController : Singleton<GameController>
             smoke1.transform.localScale = Vector3.one * (selectedChar == chun ? 2.5f : 1.5f);
             smoke2.transform.localScale = Vector3.one * (selectedChar == chun ? 1.5f : 2.5f);
             SoundController.Instance.PlayAppearFx();
+            btnSkip.gameObject.SetActive(true);
+
             yield return new WaitForSeconds(2.583f / 3f);
             smoke1.SetActive(false);
             smoke2.SetActive(false);
@@ -317,7 +323,7 @@ public class GameController : Singleton<GameController>
             chun.gameObject.SetActive(true);
             smoke1.transform.position = chunPos;
             smoke1.SetActive(true);
-            SoundController.Instance.PlayAppearFx();
+            SoundController.Instance.PlayHelloNamFx();
             yield return new WaitForSeconds(2.583f / 3f);
             smoke1.SetActive(false);
             SoundController.Instance.PlayBGM();
@@ -331,11 +337,12 @@ public class GameController : Singleton<GameController>
             //   chui.transform.DOMoveX(-3.5f, 11/2f).SetEase(Ease.Linear);
             yield return new WaitForSeconds(3);
            // milestoneDate2.gameObject.SetActive(true);
+            
+            yield return new WaitForSeconds(1.5f);
             txtMilestoneDate.text = "1996";
             txtMilestoneDate2.text = "1996";
-            yield return new WaitForSeconds(1.5f);
             smoke2.gameObject.SetActive(true);
-            SoundController.Instance.PlayAppearFx();
+            SoundController.Instance.PlayHelloNuFx();
             chui.gameObject.SetActive(true);
             chuiPos = chui.transform.position;
             chuiPos.x = -3.5f;
@@ -361,7 +368,10 @@ public class GameController : Singleton<GameController>
     public void OnChuiTouchWavez()
     {
         txtMilestoneDate.text = "2/2022";
-        txtMilestoneDate2.text = "2/2022";
+        txtMilestoneDate2.text = "Mình bắt đầu làm việc tại Wavez";
+        milestoneDate2.sizeDelta = selectedChar == chun ? new Vector2(275, 110) : new Vector2(385, 155);
+        milestoneDate2.anchoredPosition = selectedChar == chun ? new Vector2(-165, -695) : new Vector2(-5,-155);
+        milestoneDate2.gameObject.SetActive(true);
         OnChunWavezSetup();
         chuiWavez.SetActive(false);
         SoundController.Instance.PlayEatFx();
@@ -370,7 +380,11 @@ public class GameController : Singleton<GameController>
     {
         Debug.Log("OnChunTouchWavez");
         txtMilestoneDate.text = "9/2022";
-        txtMilestoneDate2.text = "9/2022";
+        txtMilestoneDate2.text = "Đến lượt mình vào Wavez làm việc nè";
+        milestoneDate2.sizeDelta = selectedChar == chun ? new Vector2(415, 170) : new Vector2(275, 110);
+        milestoneDate2.anchoredPosition = selectedChar == chun ? new Vector2(0, 315) : new Vector2(-165, 745);
+        milestoneDate2.gameObject.SetActive(false);
+        milestoneDate2.gameObject.SetActive(true);
         chunWavez.SetActive(false);
         SoundController.Instance.PlayEatFx();
         StartOurMilestone();
@@ -389,7 +403,7 @@ public class GameController : Singleton<GameController>
         IEnumerator IStart()
         {
             Time.timeScale = 1.7f;
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(5);
             milestoneDate.GetComponent<MessageItem>().Hide();
             milestoneDate2.GetComponent<MessageItem>().Hide();
             ourBg.DOMoveY(0, 5);
@@ -408,7 +422,6 @@ public class GameController : Singleton<GameController>
             foreach (var m in ourMoving)
                 m.moving = true;
             instax.moving = true;
-            Debug.Log(Time.time);
             yield return new WaitForSeconds(5f);
             foreach (var m in ourMoving)
                 m.moving = false;
@@ -441,7 +454,7 @@ public class GameController : Singleton<GameController>
                 milestoneDate.gameObject.SetActive(true);
                 milestoneDate.anchoredPosition = new Vector2(0, -1620);
             }
-
+            milestoneDate.gameObject.SetActive(true);
             txtMilestoneDate.text = daysText[countItem];
             polaroid.gameObject.SetActive(false);
             polaroid.localScale = new Vector3(0, .5f, 1);
@@ -452,7 +465,6 @@ public class GameController : Singleton<GameController>
                 m.moving = false;
             chun.Stand();
             chui.Stand();
-
             itemshow.gameObject.SetActive(true);
             phase = Phase.Showing;
             yield return new WaitUntil(() => touchFlipImage);
@@ -463,10 +475,14 @@ public class GameController : Singleton<GameController>
             polaroid.gameObject.SetActive(true);
             polaroidImg.sprite = imgs[countItem];
             polaroid.DOScaleX(.5f, .3f);
+            SoundController.Instance.PlayFlipFlopFx(true);
             yield return new WaitUntil(() => touchFlipImage);
             touchFlipImage = false;
             polaroid.DOScaleX(0, .3f);
+            SoundController.Instance.PlayFlipFlopFx(false);
+            milestoneDate.GetComponent<MessageItem>().Hide();
             yield return new WaitForSeconds(.3f);
+            milestoneDate.gameObject.SetActive(false);
             foreach (var m in ourMoving)
                 m.moving = true;
             chun.SetAnim("idle");
@@ -500,6 +516,7 @@ public class GameController : Singleton<GameController>
             chui.Stand();
             yield return new WaitForSeconds(1f);
             msg1.gameObject.SetActive(true);
+            SoundController.Instance.PlayFlipFlopFx(true);
             phase = Phase.Marring;
             yield return new WaitUntil(() => touchNext);
             touchNext = false;
@@ -508,38 +525,46 @@ public class GameController : Singleton<GameController>
             yield return new WaitForSeconds(1);
             chun.ShowAccessory();
             chui.ShowAccessory();
+            SoundController.Instance.PlayTranfigFx();
             yield return new WaitForSeconds(3);
             phase = Phase.Marring;
             yield return new WaitUntil(() => touchNext);
             touchNext = false;
             msg2.gameObject.SetActive(true);
+            SoundController.Instance.PlayFlipFlopFx(true);
             yield return new WaitUntil(() => touchNext);
             touchNext = false;
             msg2.Hide();
-            thiep.anchoredPosition = new Vector2(0, -1920);
-            thiep.gameObject.SetActive(true);
+            
             yield return new WaitForSeconds(1);
 
-            thiep.DOAnchorPos(Vector2.zero, 3);
-
-            if(selectedChar == chun)
-            {
-                txtDay.text = "07";
-                txtMonth.text = "07";
-                txtInfoRestaurant.text = txtRestaurantAddressChun.Replace("newline",Environment.NewLine);
-                imgQRRestaurant.sprite = qrRestaurantChun;
-                imgQRMoney.sprite = qrMoneyChun; 
-            }
-            else
-            {
-                txtDay.text = "08";
-                txtMonth.text = "09";
-                txtInfoRestaurant.text = txtRestaurantAddressChui.Replace("newline", Environment.NewLine);
-                imgQRRestaurant.sprite = qrRestaurantChui;
-                imgQRMoney.sprite = qrMoneyChui;
-            }
+            ShowThiep();
         }
         StartCoroutine(IMarrige());
+    }
+     private void ShowThiep()
+    {
+            thiep.anchoredPosition = new Vector2(0, -1920);
+        thiep.gameObject.SetActive(true);
+        thiep.DOAnchorPos(Vector2.zero, 3);
+        SoundController.Instance.PlayBGM2();
+
+        if (selectedChar == chun)
+        {
+            txtDay.text = "07";
+            txtMonth.text = "07";
+            txtInfoRestaurant.text = txtRestaurantAddressChun.Replace("newline", Environment.NewLine);
+            imgQRRestaurant.sprite = qrRestaurantChun;
+            imgQRMoney.sprite = qrMoneyChun;
+        }
+        else
+        {
+            txtDay.text = "08";
+            txtMonth.text = "09";
+            txtInfoRestaurant.text = txtRestaurantAddressChui.Replace("newline", Environment.NewLine);
+            imgQRRestaurant.sprite = qrRestaurantChui;
+            imgQRMoney.sprite = qrMoneyChui;
+        }
     }
     private void SetColor(SpriteRenderer[] sprites, Color color, float duration, Action callback = null)
     {
@@ -556,6 +581,14 @@ public class GameController : Singleton<GameController>
     public void OpenQRMap()
     {
         Application.OpenURL(selectedChar == chun ?"https://maps.app.goo.gl/7aUPpBYMmAx39GFMA": "https://maps.app.goo.gl/xCEQUiMpzFercaFx7");
+    }
+    private void Skip()
+    {
+        phase = Phase.Marring;
+        StopAllCoroutines();
+        foreach (var a in FindObjectsOfType<MovingObject>())
+            a.moving = false;
+        ShowThiep();
     }
 }
 public enum Phase
