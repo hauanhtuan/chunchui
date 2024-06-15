@@ -26,18 +26,11 @@
       transform: translate(-50%, -50%);
       z-index: 0;
     }
-	 #background-canvas {
-      position: fixed;
-      top: 100;
-      left: 100;
-      
-      z-index: 1; /* Đặt lớp dưới cùng */
-      filter: blur(5px); /* Làm mờ canvas nền */
-    }
+	
   </style>
 </head>
 <body>
-<canvas id="background-canvas"></canvas>
+
   <canvas id="unity-canvas"></canvas>
 
   <script src="Build/Build_WebGL.loader.js"></script>
@@ -71,9 +64,6 @@
     window.addEventListener('resize', resizeCanvas);
     window.addEventListener('load', resizeCanvas);
 
-
-
-
     createUnityInstance(document.querySelector("#unity-canvas"), {
       dataUrl: "Build/Build_WebGL.data.unityweb",
       frameworkUrl: "Build/Build_WebGL.framework.js.unityweb",
@@ -84,26 +74,7 @@
       productVersion: "1.0",
       // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
       // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
-    }).then((unityInstance)=>{
-	function copyCanvasContent() {
-        var unityCanvas = document.getElementById('unity-canvas');
-        var backgroundCanvas = document.getElementById('background-canvas');
-
-        
-
-        var ctxBackground = backgroundCanvas.getContext('2d');
-
-        // Xóa hình ảnh cũ trên background-canvas
-        ctxBackground.clearRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
-	console.log("Lmao");
-        // Sao chép nội dung từ unity-canvas vào background-canvas
-        ctxBackground.drawImage(unityCanvas, 0, 0, backgroundCanvas.width, backgroundCanvas.height);
-      }
-
-      // Gọi hàm copyCanvasContent định kỳ
-      setInterval(copyCanvasContent, 1000 / 30); // 30 lần mỗi giây
-	});
-	
+    });
   </script>
 </body>
 </html>
