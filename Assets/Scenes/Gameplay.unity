@@ -158,7 +158,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 9}
-  m_SizeDelta: {x: -60, y: 95}
+  m_SizeDelta: {x: -60, y: 130.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &22192897
 MonoBehaviour:
@@ -207,7 +207,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 28.15
+  m_fontSize: 34.05
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -919,6 +919,7 @@ MonoBehaviour:
   bounceFx: {fileID: 8300000, guid: ce8b93e43fc16994181e4721ad2badba, type: 3}
   selectedFx: {fileID: 8300000, guid: b1a48224e14bb2b4bb91e15823fdf38d, type: 3}
   eatFx: {fileID: 8300000, guid: 6bfbab7fc1f132740956f764fb4f8135, type: 3}
+  appearFx: {fileID: 8300000, guid: c34edd7eaf54ef749b420168b77c7681, type: 3}
   bgmClip: {fileID: 8300000, guid: 28314193662b94c47bd39689288ebc3b, type: 3}
 --- !u!4 &100927514
 Transform:
@@ -1683,11 +1684,11 @@ RectTransform:
   - {fileID: 22192896}
   m_Father: {fileID: 303595505}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 20, y: -20}
-  m_SizeDelta: {x: 275, y: 78.6}
-  m_Pivot: {x: 0, y: 1}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -631.7}
+  m_SizeDelta: {x: 320, y: 100}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &181522297
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12549,7 +12550,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 26.9, y: -21}
+  m_AnchoredPosition: {x: 26.899994, y: -21}
   m_SizeDelta: {x: 39, y: 27}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1273815648
@@ -13875,7 +13876,7 @@ MonoBehaviour:
   milestoneLine: {fileID: 2076291028}
   smokePrefab: {fileID: 7565894018485846944, guid: 4c7cd3fe668d0184e89259eda7b066e4, type: 3}
   milestoneZone: {fileID: 303595504}
-  milestoneDate: {fileID: 181522295}
+  milestoneDate: {fileID: 181522296}
   milestoneDate2: {fileID: 767685318}
   txtMilestoneDate: {fileID: 22192897}
   txtMilestoneDate2: {fileID: 200967685}
@@ -13918,13 +13919,13 @@ MonoBehaviour:
   txtMonth: {fileID: 4899924789043929027}
   txtInfoRestaurant: {fileID: 6397994857141301033}
   txtRestaurantAddressChun: "H\xF4n l\u1EC5 \u0111\u01B0\u1EE3c t\u1ED5 ch\u1EE9c
-    t\u1EA1i Nh\xE0 h\xE0ng New Century (Nh\xE0 h\xE0ng Xanh c\u0169)\\nS\u1ED1 433,
-    \u0111\u01B0\u1EDDng Tr\u1EA7n \u0110\u0103ng Ninh, ph\u01B0\u1EDDng Tam Thanh,
-    th\xE0nh ph\u1ED1 L\u1EA1ng S\u01A1n."
+    t\u1EA1i Nh\xE0 h\xE0ng New Century (Nh\xE0 h\xE0ng Xanh c\u0169)newlineS\u1ED1
+    433, \u0111\u01B0\u1EDDng Tr\u1EA7n \u0110\u0103ng Ninh, ph\u01B0\u1EDDng Tam
+    Thanh, th\xE0nh ph\u1ED1 L\u1EA1ng S\u01A1n."
   txtRestaurantAddressChui: "H\xF4n l\u1EC5 \u0111\u01B0\u1EE3c t\u1ED5 ch\u1EE9c
-    t\u1EA1i Nh\xE0 h\xE0ng Tr\u01B0\u1EDDng Nguy\u1EC7t 2 \\nS\u1ED1 479 QL18, ph\u01B0\u1EDDng
-    C\u1EA9m Th\u1ECBnh, th\xE0nh ph\u1ED1 C\u1EA9m Ph\u1EA3, t\u1EC9nh Qu\u1EA3ng
-    Ninh"
+    t\u1EA1i Nh\xE0 h\xE0ng Tr\u01B0\u1EDDng Nguy\u1EC7t 2newlineS\u1ED1 479 QL18,
+    ph\u01B0\u1EDDng C\u1EA9m Th\u1ECBnh, th\xE0nh ph\u1ED1 C\u1EA9m Ph\u1EA3, t\u1EC9nh
+    Qu\u1EA3ng Ninh."
   imgQRRestaurant: {fileID: 5726605862007360020}
   qrRestaurantChun: {fileID: 21300000, guid: 8c852dd32d6e93e4f9d1feee4946fa8e, type: 3}
   qrRestaurantChui: {fileID: 21300000, guid: af805354e7eb66546945855f07518602, type: 3}
@@ -21919,8 +21920,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "H\xF4n l\u1EC5 \u0111\u01B0\u1EE3c t\u1ED5 ch\u1EE9c t\u1EA1i Nh\xE0 h\xE0ng
-    Tr\u01B0\u1EDDng Nguy\u1EC7t 2 \\nS\u1ED1 479 QL18, ph\u01B0\u1EDDng C\u1EA9m
-    Th\u1ECBnh, th\xE0nh ph\u1ED1 C\u1EA9m Ph\u1EA3, t\u1EC9nh Qu\u1EA3ng Ninh"
+    Tr\u01B0\u1EDDng Nguy\u1EC7t 2 S\u1ED1 479 QL18, ph\u01B0\u1EDDng C\u1EA9m Th\u1ECBnh,
+    th\xE0nh ph\u1ED1 C\u1EA9m Ph\u1EA3, t\u1EC9nh Qu\u1EA3ng Ninh"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

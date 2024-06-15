@@ -26,7 +26,7 @@ public class GameController : Singleton<GameController>
     [SerializeField] private Transform milestoneLine;
     [SerializeField] private GameObject smokePrefab;
     [SerializeField] private GameObject milestoneZone;
-    [SerializeField] private GameObject milestoneDate;
+    [SerializeField] private RectTransform milestoneDate;
     [SerializeField] private RectTransform milestoneDate2;
     [SerializeField] private TextMeshProUGUI txtMilestoneDate;
     [SerializeField] private TextMeshProUGUI txtMilestoneDate2;
@@ -143,8 +143,6 @@ public class GameController : Singleton<GameController>
             StartOurMilestone();
         }
         if (Input.GetKeyDown(KeyCode.R))
-            Debug.Log(thiep.anchoredPosition + " " + thiep.anchorMin + " " + thiep.anchorMax);
-        if (Input.GetKeyDown(KeyCode.S))
             SceneManager.LoadScene("Gameplay");
         txtCurrentTime.text = string.Format("{0:00}:{1:00}", DateTime.Now.Hour, DateTime.Now.Minute);
         if (showingMessages)
@@ -258,7 +256,8 @@ public class GameController : Singleton<GameController>
             if (selectedChar == chun)
             {
                 milestoneLine.DOMoveY(-3.6f, 2);
-                milestoneDate2.anchoredPosition = new Vector3(20, -1345);
+                milestoneDate.anchoredPosition = new Vector2(0, -1272);
+                milestoneDate2.anchoredPosition = new Vector2(20, -1345);
                 chui.transform.DOMoveY(-8f, 2);
                 chui.transform.DOScale(.375f, 2);
                 chun.transform.DOMoveY(0, 2);
@@ -270,6 +269,7 @@ public class GameController : Singleton<GameController>
             else
             {
                 milestoneLine.DOMoveY(3.6f, 2);
+                milestoneDate.anchoredPosition = new Vector2(0, -555);
                 milestoneDate2.anchoredPosition = new Vector3(20, -625);
                 chun.transform.DOMoveY(6f, 2);
                 chun.transform.DOScale(.375f, 2);
@@ -292,6 +292,7 @@ public class GameController : Singleton<GameController>
             smoke2.transform.position = chuiPos;
             smoke1.transform.localScale = Vector3.one * (selectedChar == chun ? 2.5f : 1.5f);
             smoke2.transform.localScale = Vector3.one * (selectedChar == chun ? 1.5f : 2.5f);
+            SoundController.Instance.PlayAppearFx();
             yield return new WaitForSeconds(2.583f / 3f);
             smoke1.SetActive(false);
             smoke2.SetActive(false);
@@ -304,7 +305,7 @@ public class GameController : Singleton<GameController>
             yield return new WaitForSeconds(1);
 
             milestoneZone.SetActive(true);
-            milestoneDate.SetActive(true);
+            milestoneDate.gameObject. SetActive(true);
             milestoneDate2.gameObject.SetActive(false);
             txtMilestoneDate.text = "1995";
             chunPos = chun.transform.position;
@@ -316,6 +317,7 @@ public class GameController : Singleton<GameController>
             chun.gameObject.SetActive(true);
             smoke1.transform.position = chunPos;
             smoke1.SetActive(true);
+            SoundController.Instance.PlayAppearFx();
             yield return new WaitForSeconds(2.583f / 3f);
             smoke1.SetActive(false);
             SoundController.Instance.PlayBGM();
@@ -328,11 +330,12 @@ public class GameController : Singleton<GameController>
             //   chui.transform.position= pos;
             //   chui.transform.DOMoveX(-3.5f, 11/2f).SetEase(Ease.Linear);
             yield return new WaitForSeconds(3);
-            milestoneDate2.gameObject.SetActive(true);
+           // milestoneDate2.gameObject.SetActive(true);
             txtMilestoneDate.text = "1996";
             txtMilestoneDate2.text = "1996";
             yield return new WaitForSeconds(1.5f);
             smoke2.gameObject.SetActive(true);
+            SoundController.Instance.PlayAppearFx();
             chui.gameObject.SetActive(true);
             chuiPos = chui.transform.position;
             chuiPos.x = -3.5f;
@@ -433,9 +436,10 @@ public class GameController : Singleton<GameController>
                 tutTxt.Hide();
                 milestoneZone.SetActive(true);
                 milestoneDate2.gameObject.SetActive(false);
-                milestoneDate.SetActive(false);
+                milestoneDate.gameObject.SetActive(false);
                 yield return null;
-                milestoneDate.SetActive(true);
+                milestoneDate.gameObject.SetActive(true);
+                milestoneDate.anchoredPosition = new Vector2(0, -1620);
             }
 
             txtMilestoneDate.text = daysText[countItem];
@@ -486,7 +490,7 @@ public class GameController : Singleton<GameController>
     {
         IEnumerator IMarrige()
         {
-            phase = Phase.Marring;
+            phase = Phase.Zooming;
             foreach (var o in ourMoving)
                 o.moving = false;
             chui.transform.DOMoveX(1, 4.5f).SetEase(Ease.Linear);
@@ -496,6 +500,7 @@ public class GameController : Singleton<GameController>
             chui.Stand();
             yield return new WaitForSeconds(1f);
             msg1.gameObject.SetActive(true);
+            phase = Phase.Marring;
             yield return new WaitUntil(() => touchNext);
             touchNext = false;
             msg1.Hide();
@@ -521,7 +526,7 @@ public class GameController : Singleton<GameController>
             {
                 txtDay.text = "07";
                 txtMonth.text = "07";
-                txtInfoRestaurant.text = txtRestaurantAddressChun;
+                txtInfoRestaurant.text = txtRestaurantAddressChun.Replace("newline",Environment.NewLine);
                 imgQRRestaurant.sprite = qrRestaurantChun;
                 imgQRMoney.sprite = qrMoneyChun; 
             }
@@ -529,7 +534,7 @@ public class GameController : Singleton<GameController>
             {
                 txtDay.text = "08";
                 txtMonth.text = "09";
-                txtInfoRestaurant.text = txtRestaurantAddressChui;
+                txtInfoRestaurant.text = txtRestaurantAddressChui.Replace("newline", Environment.NewLine);
                 imgQRRestaurant.sprite = qrRestaurantChui;
                 imgQRMoney.sprite = qrMoneyChui;
             }
