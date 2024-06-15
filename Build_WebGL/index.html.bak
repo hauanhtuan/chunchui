@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Banana Cat - Hide and Seek</title>
+    <title>Tuan Diep's Wedding Invitation</title>
   </head>
   <body style="text-align: center; padding: 0; border: 0; margin: 0;">
     <canvas id="unity-canvas"></canvas>
@@ -14,13 +14,12 @@
     margin: 0;
   }
   #unity-canvas {
-    width: calc(100vh * 9 / 16); /* tính toán chiều rộng dựa trên chiều cao của viewport */
-    height: 100vh; /* chiều cao của viewport */
-    background: #808080;
+    width: calc(100vh * 9 / 16); 
+    height: 100vh; 
+    background: #000000;
     position: fixed;
     top: 0;
-    left: 50%; /* căn giữa theo chiều ngang */
-    transform: translateX(-50%); /* điều chỉnh để căn giữa chính xác */
+    
   }
 </style>
 
