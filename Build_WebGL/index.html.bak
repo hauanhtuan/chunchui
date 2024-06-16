@@ -18,7 +18,17 @@
       margin: 0;
       overflow: hidden; /* Ngăn chặn cuộn màn hình khi chế độ ngang */
     }
-   
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+      backdrop-filter: blur(10px); /* Điều chỉnh độ mờ */
+      z-index: -2; /* Đặt pseudo-element phía sau nội dung */
+    }
     #background-canvas {
       position: fixed;
       top: 0;
@@ -26,8 +36,8 @@
       width: 100%;
       height: 100%;
       background: #ffffff;
-	  filter: blur(5px);
       z-index: -1;
+      filter: blur(10px); /* Làm mờ canvas */
     }
     #unity-canvas {
       position: fixed;
