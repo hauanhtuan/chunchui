@@ -11,33 +11,12 @@
       margin: 0;
     }
     body {
-      background: #000000;
+	background: #ffffff;
       text-align: center;
       padding: 0;
       border: 0;
       margin: 0;
       overflow: hidden; /* Ngăn chặn cuộn màn hình khi chế độ ngang */
-    }
-    body::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
-      backdrop-filter: blur(10px); /* Điều chỉnh độ mờ */
-      z-index: -2; /* Đặt pseudo-element phía sau nội dung */
-    }
-    #background-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: red;
-      z-index: -1;
-      filter: blur(10px); /* Làm mờ canvas */
     }
     #unity-canvas {
       position: fixed;
@@ -47,15 +26,25 @@
       transform: translate(-50%, -50%);
       z-index: 0;
     }
+	
   </style>
 </head>
 <body>
 
-  <canvas id="background-canvas"></canvas>
   <canvas id="unity-canvas"></canvas>
 
   <script src="Build/Build_WebGL.loader.js"></script>
   <script>
+    if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+      // Thiết lập cho thiết bị di động: lấp đầy không gian trình duyệt với canvas game
+      var meta = document.createElement('meta');
+      meta.name = 'viewport';
+      meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+      document.getElementsByTagName('head')[0].appendChild(meta);
+
+      document.body.style.textAlign = "left";
+    }
+
     function resizeCanvas() {
       var canvas = document.getElementById('unity-canvas');
       var windowWidth = window.innerWidth;
@@ -72,21 +61,6 @@
       }
     }
 
-    function copyCanvasContent() {
-      var unityCanvas = document.getElementById('unity-canvas');
-      var backgroundCanvas = document.getElementById('background-canvas');
-      var backgroundContext = backgroundCanvas.getContext('2d');
-
-      // Kiểm tra xem unityCanvas đã có nội dung hay chưa
-      if (unityCanvas.width > 0 && unityCanvas.height > 0) {
-        backgroundCanvas.width = unityCanvas.width;
-        backgroundCanvas.height = unityCanvas.height;
-
-        backgroundContext.clearRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
-        backgroundContext.drawImage(unityCanvas, 0, 0, unityCanvas.width, unityCanvas.height, 0, 0, backgroundCanvas.width, backgroundCanvas.height);
-      }
-    }
-
     window.addEventListener('resize', resizeCanvas);
     window.addEventListener('load', resizeCanvas);
 
@@ -98,18 +72,11 @@
       companyName: "DefaultCompany",
       productName: "ChunChui",
       productVersion: "1.0",
-    }).then((unityInstance) => {
-      resizeCanvas();
-      
-      function update() {
-        copyCanvasContent();
-        setTimeout(() => {
-          requestAnimationFrame(update);
-        }, 1000/15 ); // Giới hạn tốc độ khung hình ở 30 FPS
-      }
-
-      update();
-    });
+      // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
+      // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
+    }).then((unityInstance)=>{
+	resizeCanvas();
+	});
   </script>
 </body>
 </html>

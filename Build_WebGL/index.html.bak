@@ -105,7 +105,7 @@
         copyCanvasContent();
         setTimeout(() => {
           requestAnimationFrame(update);
-        }, 1000 ); // Giới hạn tốc độ khung hình ở 30 FPS
+        }, 1000/15 ); // Giới hạn tốc độ khung hình ở 30 FPS
       }
 
       update();
