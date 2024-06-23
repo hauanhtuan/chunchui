@@ -5,6 +5,12 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <title>Tuan Diep's Wedding Invitation</title>
   <style>
+  @font-face {
+      font-family: 'CustomFont';
+      src: url('Build/FVF Fernando 08.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
     #unity-canvas {
       position: fixed;
       background: #ffffff;
@@ -14,36 +20,48 @@
       z-index: 0;
     }
 
-    #progress-container {
+     #progress-container {
       position: fixed;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      background: rgba(0, 0, 0, 0.5);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       z-index: 10;
+	  background: #FFC9C9;
     }
 
     #progress-bar {
       width: 50%;
       background: #000;
-      border: 5px solid #000;
+      border: 3px solid #000;
       
       overflow: hidden;
     }
 
     #progress-bar-inner {
-      height: 30px;
+      height: 15px;
       width: 0;
       background: #fff;
+    }
+	#loading-text {
+	 font-family: 'CustomFont', sans-serif; /* Use custom font */
+      font-size: 30px; /* Adjust font size */
+       color: #fff;
+      margin-bottom: 20px;
+	 text-shadow: 
+        2px 2px 0 #000, 
+        -2px -2px 0 #000, 
+        -2px 2px 0 #000, 
+        2px -2px 0 #000;
     }
   </style>
 </head>
 <body style="text-align: center; padding: 0; border: 0; margin: 0;">
   <div id="progress-container">
+   <div id="loading-text">Đang tải...</div>
     <div id="progress-bar">
       <div id="progress-bar-inner"></div>
     </div>
@@ -53,18 +71,32 @@
   <script>
     function resizeCanvas() {
       var canvas = document.getElementById('unity-canvas');
+      var progressContainer = document.getElementById('progress-container');
       var windowWidth = window.innerWidth;
       var windowHeight = window.innerHeight;
+      var width, height;
 
       if (windowWidth / windowHeight < 9 / 16) {
         // If the window ratio is smaller than 9:16, adjust according to the width
-        canvas.style.width = windowWidth + 'px';
-        canvas.style.height = (windowWidth * 16 / 9) + 'px';
+        width = windowWidth;
+        height = (windowWidth * 16 / 9);
       } else {
         // If the window ratio is greater than or equal to 9:16, adjust according to the height
-        canvas.style.width = (windowHeight * 9 / 16) + 'px';
-        canvas.style.height = windowHeight + 'px';
+        width = (windowHeight * 9 / 16);
+        height = windowHeight;
       }
+
+      canvas.style.width = width + 'px';
+      canvas.style.height = height + 'px';
+      canvas.style.top = '50%';
+      canvas.style.left = '50%';
+      canvas.style.transform = 'translate(-50%, -50%)';
+
+      progressContainer.style.width = width + 'px';
+      progressContainer.style.height = height + 'px';
+      progressContainer.style.top = '50%';
+      progressContainer.style.left = '50%';
+      progressContainer.style.transform = 'translate(-50%, -50%)';
     }
     window.addEventListener('resize', resizeCanvas);
     window.addEventListener('load', resizeCanvas);
@@ -80,11 +112,18 @@
     }, (progress) => {
       console.log(progress);
       var progressBarInner = document.getElementById('progress-bar-inner');
-      progressBarInner.style.width = (progress * 100) + '%';
+      progressBarInner.style.width = (progress * 90) + '%';
     }).then((unityInstance) => {
       resizeCanvas();
-      var progressContainer = document.getElementById('progress-container');
-      progressContainer.style.display = 'none';
+	  var progressBarInner = document.getElementById('progress-bar-inner');
+	  setTimeout(()=>{
+	    progressBarInner.style.width = (95) + '%';
+	  },1000);
+      setTimeout(() => {
+	  progressBarInner.style.width = (100) + '%';
+        var progressContainer = document.getElementById('progress-container');
+        progressContainer.style.display = 'none';
+      }, 2500); 
     });
   </script>
 </body>
