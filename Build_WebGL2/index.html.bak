@@ -50,7 +50,7 @@
 	 font-family: 'CustomFont', sans-serif; /* Use custom font */
       font-size: 30px; /* Adjust font size */
        color: #fff;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
 	 text-shadow: 
         2px 2px 0 #000, 
         -2px -2px 0 #000, 
