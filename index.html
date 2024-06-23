@@ -5,19 +5,6 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <title>Tuan Diep's Wedding Invitation</title>
   <style>
-    * {
-      box-sizing: border-box;
-      padding: 0;
-      margin: 0;
-    }
-    body {
-	background: #ffffff;
-      text-align: center;
-      padding: 0;
-      border: 0;
-      margin: 0;
-      overflow: hidden; /* Ngăn chặn cuộn màn hình khi chế độ ngang */
-    }
     #unity-canvas {
       position: fixed;
       background: #ffffff;
@@ -26,57 +13,91 @@
       transform: translate(-50%, -50%);
       z-index: 0;
     }
-	
+
+     #progress-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+
+    #progress-bar {
+      width: 50%;
+      background: #000;
+      border: 5px solid #000;
+      
+      overflow: hidden;
+    }
+
+    #progress-bar-inner {
+      height: 30px;
+      width: 0;
+      background: #fff;
+    }
   </style>
 </head>
-<body>
-
+<body style="text-align: center; padding: 0; border: 0; margin: 0;">
+  <div id="progress-container">
+    <div id="progress-bar">
+      <div id="progress-bar-inner"></div>
+    </div>
+  </div>
   <canvas id="unity-canvas"></canvas>
-
-  <script src="Build/Build_WebGL.loader.js"></script>
+  <script src="Build/Build_WebGL2.loader.js"></script>
   <script>
-    if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-      // Thiết lập cho thiết bị di động: lấp đầy không gian trình duyệt với canvas game
-      var meta = document.createElement('meta');
-      meta.name = 'viewport';
-      meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-      document.getElementsByTagName('head')[0].appendChild(meta);
-
-      document.body.style.textAlign = "left";
-    }
-
     function resizeCanvas() {
       var canvas = document.getElementById('unity-canvas');
+      var progressContainer = document.getElementById('progress-container');
       var windowWidth = window.innerWidth;
       var windowHeight = window.innerHeight;
+      var width, height;
 
       if (windowWidth / windowHeight < 9 / 16) {
-        // Nếu tỷ lệ cửa sổ nhỏ hơn 9:16, điều chỉnh theo chiều rộng
-        canvas.style.width = windowWidth + 'px';
-        canvas.style.height = (windowWidth * 16 / 9) + 'px';
+        // If the window ratio is smaller than 9:16, adjust according to the width
+        width = windowWidth;
+        height = (windowWidth * 16 / 9);
       } else {
-        // Nếu tỷ lệ cửa sổ lớn hơn hoặc bằng 9:16, điều chỉnh theo chiều cao
-        canvas.style.width = (windowHeight * 9 / 16) + 'px';
-        canvas.style.height = windowHeight + 'px';
+        // If the window ratio is greater than or equal to 9:16, adjust according to the height
+        width = (windowHeight * 9 / 16);
+        height = windowHeight;
       }
-    }
 
+      canvas.style.width = width + 'px';
+      canvas.style.height = height + 'px';
+      canvas.style.top = '50%';
+      canvas.style.left = '50%';
+      canvas.style.transform = 'translate(-50%, -50%)';
+
+      progressContainer.style.width = width + 'px';
+      progressContainer.style.height = height + 'px';
+      progressContainer.style.top = '50%';
+      progressContainer.style.left = '50%';
+      progressContainer.style.transform = 'translate(-50%, -50%)';
+    }
     window.addEventListener('resize', resizeCanvas);
     window.addEventListener('load', resizeCanvas);
 
     createUnityInstance(document.querySelector("#unity-canvas"), {
-      dataUrl: "Build/Build_WebGL.data.unityweb",
-      frameworkUrl: "Build/Build_WebGL.framework.js.unityweb",
-      codeUrl: "Build/Build_WebGL.wasm.unityweb",
+      dataUrl: "Build/Build_WebGL2.data.unityweb",
+      frameworkUrl: "Build/Build_WebGL2.framework.js.unityweb",
+      codeUrl: "Build/Build_WebGL2.wasm.unityweb",
       streamingAssetsUrl: "StreamingAssets",
       companyName: "DefaultCompany",
       productName: "ChunChui",
       productVersion: "1.0",
-      // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
-      // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
-    }).then((unityInstance)=>{
-	resizeCanvas();
-	});
+    }, (progress) => {
+      console.log(progress);
+      var progressBarInner = document.getElementById('progress-bar-inner');
+      progressBarInner.style.width = (progress * 100) + '%';
+    }).then((unityInstance) => {
+      resizeCanvas();
+      var progressContainer = document.getElementById('progress-container');
+      progressContainer.style.display = 'none';
+    });
   </script>
 </body>
 </html>

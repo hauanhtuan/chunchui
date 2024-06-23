@@ -14472,6 +14472,8 @@ MonoBehaviour:
   msg1: {fileID: 1924179724}
   msg2: {fileID: 285852581}
   thiep: {fileID: 347199666}
+  thiepScroll: {fileID: 1040213025}
+  scrollSpeed: 14
   txtDay: {fileID: 773809842140938665}
   txtMonth: {fileID: 4899924789043929027}
   txtInfoRestaurant: {fileID: 6397994857141301033}

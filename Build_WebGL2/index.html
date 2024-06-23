@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Tuan Diep's Wedding Invitation</title>
+  <style>
+    #unity-canvas {
+      position: fixed;
+      background: #ffffff;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 0;
+    }
+
+     #progress-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+
+    #progress-bar {
+      width: 50%;
+      background: #000;
+      border: 5px solid #000;
+      
+      overflow: hidden;
+    }
+
+    #progress-bar-inner {
+      height: 30px;
+      width: 0;
+      background: #fff;
+    }
+  </style>
+</head>
+<body style="text-align: center; padding: 0; border: 0; margin: 0;">
+  <div id="progress-container">
+    <div id="progress-bar">
+      <div id="progress-bar-inner"></div>
+    </div>
+  </div>
+  <canvas id="unity-canvas"></canvas>
+  <script src="Build/Build_WebGL2.loader.js"></script>
+  <script>
+    function resizeCanvas() {
+      var canvas = document.getElementById('unity-canvas');
+      var progressContainer = document.getElementById('progress-container');
+      var windowWidth = window.innerWidth;
+      var windowHeight = window.innerHeight;
+      var width, height;
+
+      if (windowWidth / windowHeight < 9 / 16) {
+        // If the window ratio is smaller than 9:16, adjust according to the width
+        width = windowWidth;
+        height = (windowWidth * 16 / 9);
+      } else {
+        // If the window ratio is greater than or equal to 9:16, adjust according to the height
+        width = (windowHeight * 9 / 16);
+        height = windowHeight;
+      }
+
+      canvas.style.width = width + 'px';
+      canvas.style.height = height + 'px';
+      canvas.style.top = '50%';
+      canvas.style.left = '50%';
+      canvas.style.transform = 'translate(-50%, -50%)';
+
+      progressContainer.style.width = width + 'px';
+      progressContainer.style.height = height + 'px';
+      progressContainer.style.top = '50%';
+      progressContainer.style.left = '50%';
+      progressContainer.style.transform = 'translate(-50%, -50%)';
+    }
+    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('load', resizeCanvas);
+
+    createUnityInstance(document.querySelector("#unity-canvas"), {
+      dataUrl: "Build/Build_WebGL2.data.unityweb",
+      frameworkUrl: "Build/Build_WebGL2.framework.js.unityweb",
+      codeUrl: "Build/Build_WebGL2.wasm.unityweb",
+      streamingAssetsUrl: "StreamingAssets",
+      companyName: "DefaultCompany",
+      productName: "ChunChui",
+      productVersion: "1.0",
+    }, (progress) => {
+      console.log(progress);
+      var progressBarInner = document.getElementById('progress-bar-inner');
+      progressBarInner.style.width = (progress * 100) + '%';
+    }).then((unityInstance) => {
+      resizeCanvas();
+      var progressContainer = document.getElementById('progress-container');
+      progressContainer.style.display = 'none';
+    });
+  </script>
+</body>
+</html>

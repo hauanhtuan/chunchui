@@ -59,6 +59,8 @@ public class GameController : Singleton<GameController>
     [SerializeField] private MessageItem msg2;
     [SerializeField] private RectTransform thiep;
     [Header("Info thiep")]
+    [SerializeField] private ScrollRect thiepScroll;
+    [SerializeField] private float scrollSpeed = 1;
     [SerializeField] private TextMeshProUGUI txtDay;
     [SerializeField] private TextMeshProUGUI txtMonth;
     [SerializeField] private TextMeshProUGUI txtInfoRestaurant;
@@ -140,6 +142,18 @@ public class GameController : Singleton<GameController>
     }
     private void Update()
     {
+        if (thiep.gameObject.activeSelf)
+        {
+            float scrollDelta = Input.GetAxis("Mouse ScrollWheel") * scrollSpeed*Time.deltaTime;
+
+            if (scrollDelta != 0.0f)
+            {
+                // Adjust the vertical position of the ScrollRect content
+                thiepScroll.verticalNormalizedPosition += scrollDelta;
+                // Clamp the value between 0 and 1
+                thiepScroll.verticalNormalizedPosition = Mathf.Clamp01(thiepScroll.verticalNormalizedPosition);
+            }
+        }
         if (Input.GetKeyDown(KeyCode.A))
         {
             messageZone.SetActive(false);
