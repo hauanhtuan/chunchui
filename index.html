@@ -82,6 +82,15 @@
   <canvas id="unity-canvas"></canvas>
   <script src="Build/Build_WebGL2.loader.js"></script>
   <script>
+  if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+      // Thiết lập cho thiết bị di động: lấp đầy không gian trình duyệt với canvas game
+      var meta = document.createElement('meta');
+      meta.name = 'viewport';
+      meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+      document.getElementsByTagName('head')[0].appendChild(meta);
+
+      document.body.style.textAlign = "left";
+    }
     function resizeCanvas() {
       var canvas = document.getElementById('unity-canvas');
       var progressContainer = document.getElementById('progress-container');
